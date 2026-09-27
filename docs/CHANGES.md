@@ -1,3 +1,10 @@
+# Unreleased
+
+## Changes
+
+- Display options reorganized: visibility toggles now live under Displays (including the moved main-body and minimap controls), with the double-negative Hide main GUI body replaced by Show main GUI body.
+- Added window opacity (50-100%, hover-previewed) and a Show title bar backdrop toggle under Frame Options.
+- Header decoration options renamed to plain language: Show Pepe (cuteness) and Pepe position.
 # v2.3.24 - 2026-09-27
 
 ## Changes

@@ -105,6 +105,8 @@ function addon:InitializeDatabase()
 		SavedLoadouts = {},
 
 		WindowScale = 1.0,
+		WindowOpacity = 1.0,
+		TitleBackdrop = true,
 
 		IsFrameLocked = false,
 		IsMinimized = false,
@@ -226,6 +228,8 @@ function addon:RestoreSavedSettings()
 	end
 
 	addon:SetWindowScale(self.db.global.WindowScale)
+	addon:SetWindowOpacity(self.db.global.WindowOpacity)
+	addon:ApplyTitleBackdrop()
 	addon:UpdateMinimizeState()
 
 	if BattlePetUtilityFrame:IsShown() then
