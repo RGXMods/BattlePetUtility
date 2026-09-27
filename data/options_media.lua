@@ -200,6 +200,39 @@ function addon:GetTextSizeMenuData()
 		addon.RefreshDropdownMenu(addon.ContextMenu)
 	end
 
+	local function BuildSizeStyles(baseSize)
+		local sizes = {
+			titleText  = baseSize + 2,
+			normalText = baseSize,
+			smallText  = math.max(8, baseSize - 1),
+		}
+		local tempStyles = {}
+		for _, styleDef in ipairs(styleDefs) do
+			local nextStyle = Fonts:NormalizeStyle(self.db.global[styleDef.key] or styleDef.default)
+			nextStyle.size = sizes[styleDef.key]
+			tempStyles[styleDef.key] = nextStyle
+		end
+		return tempStyles
+	end
+
+	local function PreviewSize(baseSize)
+		if not Fonts or type(Fonts.ApplyStyleMap) ~= "function" then return end
+		Fonts:ApplyStyleMap({
+			titleText = BattlePetUtilityFontTitle,
+			normalText = BattlePetUtilityFontNormal,
+			smallText = BattlePetUtilityFontSmall,
+		}, BuildSizeStyles(baseSize))
+	end
+
+	local function RestoreStyles()
+		if not Fonts or type(Fonts.ApplyStyleMap) ~= "function" then return end
+		Fonts:ApplyStyleMap({
+			titleText = BattlePetUtilityFontTitle,
+			normalText = BattlePetUtilityFontNormal,
+			smallText = BattlePetUtilityFontSmall,
+		}, self.db.global)
+	end
+
 	local menu = {}
 	for _, size in ipairs(SIZE_OPTIONS) do
 		local sz = size
@@ -208,6 +241,8 @@ function addon:GetTextSizeMenuData()
 			func = function() ApplySize(sz) end,
 			checked = function() return addon:GetCurrentFontSize() == sz end,
 			keepShownOnClick = true,
+			onEnter = function() PreviewSize(sz) end,
+			onLeave = function() RestoreStyles() end,
 		})
 	end
 	return menu

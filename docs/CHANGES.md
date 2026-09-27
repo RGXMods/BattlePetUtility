@@ -7,7 +7,12 @@
 
 # Unreleased
 
+## Changes
+
+- Options context menus migrated to RGXDropdowns (custom dropdown) with hover live previews: hovering font, bar texture, or text size entries previews the change on the HUD, and leaving the entry restores the saved setting.
+
 ## Fixes
+
 
 - Fixed item-button secure actions not being deterministically reapplied after combat. `SafeSetButtonAttribute` correctly refuses `SetAttribute` during combat lockdown (taint-safe), but the deferred-refresh flag was never consumed and the item-button event bridge did not listen for `PLAYER_REGEN_ENABLED` — a button configured during combat only recovered incidentally on the next bag update. The bridge now listens for combat end and rebuilds the buttons when a write was deferred.
 
