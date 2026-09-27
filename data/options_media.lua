@@ -248,6 +248,60 @@ function addon:GetTextSizeMenuData()
 	return menu
 end
 
+local TITLE_BACKDROP = {
+	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+	tile = true,
+	tileSize = 16,
+	edgeSize = 10,
+	insets = { left = 3, right = 3, top = 3, bottom = 3 },
+}
+
+function addon:ApplyTitleBackdrop()
+	local title = BattlePetUtilityFrameTitle
+	if not title then return end
+	if self.db.global.TitleBackdrop then
+		if title.SetBackdrop then
+			title:SetBackdrop(TITLE_BACKDROP)
+		end
+		if title.SetBackdropColor then
+			title:SetBackdropColor(0.02, 0.02, 0.035, 0.78)
+		end
+		if title.SetBackdropBorderColor then
+			title:SetBackdropBorderColor(0.45, 0.18, 0.85, 0.95)
+		end
+	elseif title.SetBackdrop then
+		title:SetBackdrop(nil)
+	end
+end
+
+function addon:SetWindowOpacity(opacity)
+	self.db.global.WindowOpacity = opacity or 1.0
+	if BattlePetUtilityFrame then
+		BattlePetUtilityFrame:SetAlpha(self.db.global.WindowOpacity)
+	end
+end
+
+function addon:GetWindowOpacityMenu()
+	local opacityOptions = { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 }
+	local menu = {}
+	for _, value in ipairs(opacityOptions) do
+		local opacity = value
+		tinsert(menu, {
+			text = string.format("%d%%", opacity * 100),
+			func = function()
+				addon:SetWindowOpacity(opacity)
+				addon.RefreshDropdownMenu(addon.ContextMenu)
+			end,
+			checked = function() return (self.db.global.WindowOpacity or 1.0) == opacity end,
+			keepShownOnClick = true,
+			onEnter = function() BattlePetUtilityFrame:SetAlpha(opacity) end,
+			onLeave = function() BattlePetUtilityFrame:SetAlpha(self.db.global.WindowOpacity or 1.0) end,
+		})
+	end
+	return menu
+end
+
 function addon:GetWindowScaleMenu()
 	local windowScales = { 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5 }
 	local menu = {}

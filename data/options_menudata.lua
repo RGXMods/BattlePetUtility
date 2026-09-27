@@ -195,59 +195,45 @@ function addon:GetPrimaryMenuData()
 			}
 		},
 		{
+		{
 			text = "", isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
 			text = "Displays", isTitle = true, notCheckable = true,
 		},
 		{
-			text = "Enable cuteness",
+			text = "Show main GUI body",
 			func = function()
-				self.db.global.ShowPepe = not self.db.global.ShowPepe
-				addon:RefreshHeaderArt()
-				if self.db.global.ShowPepe then
-					BattlePetUtilityFrameTitle.pepeFrame:Show()
-				else
-					BattlePetUtilityFrameTitle.pepeFrame:Hide()
-				end
+				self.db.global.HideMainGUI = not self.db.global.HideMainGUI
+				addon:UpdateMinimizeState()
 			end,
-			checked = function() return self.db.global.ShowPepe end,
+			checked = function() return not self.db.global.HideMainGUI end,
+			isNotRadio = true,
+			keepShownOnClick = true,
+		},
+		{
+			text = "Show zone pet tracker",
+			func = function()
+				self.db.global.ShowZoneTracker = not self.db.global.ShowZoneTracker
+				addon:RestoreSavedSettings()
+			end,
+			checked = function() return self.db.global.ShowZoneTracker end,
 			isNotRadio = true,
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = {
-				{ text = "Cuteness Position", notCheckable = true, isTitle = true },
+				{ text = "Zone Tracker Options", isTitle = true, notCheckable = true },
 				{
-					text = "Right side",
+					text = "Show missing pets list",
 					func = function()
-						self.db.global.PepeOnLeft = false
-						addon:RefreshHeaderArt()
-						addon.RefreshDropdownMenu(addon.ContextMenu)
+						self.db.global.ShowZoneTrackerPetList = not self.db.global.ShowZoneTrackerPetList
+						addon:RefreshZoneTracker()
 					end,
-					checked = function() return not self.db.global.PepeOnLeft end,
-					keepShownOnClick = true,
-				},
-				{
-					text = "Left side",
-					func = function()
-						self.db.global.PepeOnLeft = true
-						addon:RefreshHeaderArt()
-						addon.RefreshDropdownMenu(addon.ContextMenu)
-					end,
-					checked = function() return self.db.global.PepeOnLeft end,
+					checked = function() return self.db.global.ShowZoneTrackerPetList end,
+					isNotRadio = true,
 					keepShownOnClick = true,
 				},
 			},
-		},
-		{
-			text = "Show pet charms",
-			func = function()
-				self.db.global.ShowPetCharms = not self.db.global.ShowPetCharms
-				addon:RestoreSavedSettings()
-			end,
-			checked = function() return self.db.global.ShowPetCharms end,
-			isNotRadio = true,
-			keepShownOnClick = true,
 		},
 		{
 			text = "Show pet health and experience text",
@@ -297,6 +283,16 @@ function addon:GetPrimaryMenuData()
 			},
 		},
 		{
+			text = "Show pet charms",
+			func = function()
+				self.db.global.ShowPetCharms = not self.db.global.ShowPetCharms
+				addon:RestoreSavedSettings()
+			end,
+			checked = function() return self.db.global.ShowPetCharms end,
+			isNotRadio = true,
+			keepShownOnClick = true,
+		},
+		{
 			text = "Show pet loadouts menu",
 			func = function()
 				local state = tonumber(self.db.global.PetUtilityMenuState) or 0
@@ -341,42 +337,42 @@ function addon:GetPrimaryMenuData()
 			isNotRadio = true,
 			keepShownOnClick = true,
 		},
-		{
-			text = "", isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
-			text = "Zone Tracker", isTitle = true, notCheckable = true,
-		},
-		{
-			text = "Hide main GUI body",
+			text = "Show Pepe (cuteness)",
 			func = function()
-				self.db.global.HideMainGUI = not self.db.global.HideMainGUI
-				addon:UpdateMinimizeState()
+				self.db.global.ShowPepe = not self.db.global.ShowPepe
+				addon:RefreshHeaderArt()
+				if self.db.global.ShowPepe then
+					BattlePetUtilityFrameTitle.pepeFrame:Show()
+				else
+					BattlePetUtilityFrameTitle.pepeFrame:Hide()
+				end
 			end,
-			checked = function() return self.db.global.HideMainGUI end,
-			isNotRadio = true,
-			keepShownOnClick = true,
-		},
-		{
-			text = "Show zone pet tracker",
-			func = function()
-				self.db.global.ShowZoneTracker = not self.db.global.ShowZoneTracker
-				addon:RestoreSavedSettings()
-			end,
-			checked = function() return self.db.global.ShowZoneTracker end,
+			checked = function() return self.db.global.ShowPepe end,
 			isNotRadio = true,
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = {
-				{ text = "Zone Tracker Options", isTitle = true, notCheckable = true },
+				{ text = "Pepe position", notCheckable = true, isTitle = true },
 				{
-					text = "Show missing pets list",
+					text = "Right side",
 					func = function()
-						self.db.global.ShowZoneTrackerPetList = not self.db.global.ShowZoneTrackerPetList
-						addon:RefreshZoneTracker()
+						self.db.global.PepeOnLeft = false
+						addon:RefreshHeaderArt()
+						addon.RefreshDropdownMenu(addon.ContextMenu)
 					end,
-					checked = function() return self.db.global.ShowZoneTrackerPetList end,
-					isNotRadio = true,
+					checked = function() return not self.db.global.PepeOnLeft end,
+					keepShownOnClick = true,
+				},
+				{
+					text = "Left side",
+					func = function()
+						self.db.global.PepeOnLeft = true
+						addon:RefreshHeaderArt()
+						addon.RefreshDropdownMenu(addon.ContextMenu)
+					end,
+					checked = function() return self.db.global.PepeOnLeft end,
 					keepShownOnClick = true,
 				},
 			},
@@ -427,6 +423,23 @@ function addon:GetPrimaryMenuData()
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = addon:GetWindowScaleMenu(),
+		},
+		{
+			text = string.format("Window opacity (%d%%)", math.floor((self.db.global.WindowOpacity or 1.0) * 100 + 0.5)),
+			notCheckable = true,
+			hasArrow = true,
+			keepShownOnClick = true,
+			menuList = addon:GetWindowOpacityMenu(),
+		},
+		{
+			text = "Show title bar backdrop",
+			func = function()
+				self.db.global.TitleBackdrop = not self.db.global.TitleBackdrop
+				addon:ApplyTitleBackdrop()
+			end,
+			checked = function() return self.db.global.TitleBackdrop end,
+			isNotRadio = true,
+			keepShownOnClick = true,
 		},
 	}
 
