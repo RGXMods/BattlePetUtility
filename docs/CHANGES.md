@@ -1,9 +1,9 @@
-# v2.3.23 - 2026-09-27
+# v2.3.24 - 2026-09-27
 
 ## Changes
 
 - Text size options now live-preview on hover. Hover previews now cover font, bar texture, and text size selections in the /bpu menu.
-- WoWInterface distribution retired.
+- Removed the retired third-party directory listing; distribution is CurseForge and GitHub only.
 - MIT license added.
 - Project documentation restored and aligned with the CurseForge description.
 
