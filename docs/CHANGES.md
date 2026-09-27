@@ -1,18 +1,27 @@
+# v2.3.23 - 2026-09-27
+
+## Changes
+
+- Text size options now live-preview on hover. Hover previews now cover font, bar texture, and text size selections in the /bpu menu.
+- WoWInterface distribution retired.
+- MIT license added.
+- Project documentation restored and aligned with the CurseForge description.
+
+# v2.3.22 - 2026-08-13
+
+## Changes
+
+- Battle-pet operations migrated to RGXPetBattles (`RGX:GetPetBattles()`); direct C_PetBattles calls removed.
+
 # v2.3.21 - 2026-08-08
 
 ## Changes
 - **Minimap API update**: `RGX:CreateMinimapButton()` → `RGXMinimap:Create()` (new API)
 - Slash commands already use `RGX:RegisterSlashCommand`
 - Database already uses `RGX:NewDatabase()`
-
-# Unreleased
-
-## Changes
-
-- Options context menus migrated to RGXDropdowns (custom dropdown) with hover live previews: hovering font, bar texture, or text size entries previews the change on the HUD, and leaving the entry restores the saved setting.
+- Options context menus migrated to RGXDropdowns (custom dropdown) with hover live previews for font and bar texture selections.
 
 ## Fixes
-
 
 - Fixed item-button secure actions not being deterministically reapplied after combat. `SafeSetButtonAttribute` correctly refuses `SetAttribute` during combat lockdown (taint-safe), but the deferred-refresh flag was never consumed and the item-button event bridge did not listen for `PLAYER_REGEN_ENABLED` — a button configured during combat only recovered incidentally on the next bag update. The bridge now listens for combat end and rebuilds the buttons when a write was deferred.
 

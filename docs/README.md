@@ -2,7 +2,7 @@
 
 Documentation index for BattlePetUtility.
 
-Current addon version: `v2.3.17`
+Current addon version: `v2.3.23`
 
 ## Files
 
