@@ -132,8 +132,10 @@ jobs:
             changelog_content="$(cat "docs/changelogs/${short_version}.md")"
           elif [[ -f "docs/CHANGES.md" ]]; then
             changelog_content="$(awk '
-              /^## / {
+              /^# / {
                 if (started) { exit }
+              }
+              /^## / {
                 started=1
               }
               started { print }
