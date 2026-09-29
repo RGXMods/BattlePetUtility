@@ -1,7 +1,7 @@
 ## Interface: 120100
 ## Title: |cffffffffBattle Pet Utility|r|cffb512fc!|r
 ## Notes: |n|r |cffb07fff/bpu -|r Open options panel
-## Version: v2.3.24
+## Version: v2.3.25
 ## Author: DonnieDice
 ## Category: RGX
 ## Group: RGX
