@@ -31,12 +31,12 @@ function addon:InitializeMinimapIcon()
 
         tooltip = {
             title       = "|TInterface\\AddOns\\BattlePetUtility\\media\\logo.tga:18:18:0:0|t " .. (addon.ADDON_TITLE_COLORED or "|cffb512fcB|r|cffffffffattle |cffb512fcP|r|cffffffffet |cffb512fcU|r|cfffffffftility|r|cffb512fc!|r") .. " |cffd9c6ffBattle Pet HUD|r",
-            description = "|cffd9c6ffYour compact pet team, loadouts, and tracker hub.|r",
+            description = BPU.L["minimap_description"],
             lines = {
-                { left = "|cffb512fcLeft-Click|r",       right = "Show or hide Battle Pet Utility!" },
-                { left = "|cff4ecdc4Right-Click|r",      right = "Open options menu" },
-                { left = "|cffe67e22Drag|r",             right = "Move around minimap" },
-                { left = "|cffe74c3cCtrl+Right-Click|r", right = "Hide minimap icon" },
+                { left = BPU.L["minimap_left_click"],       right = BPU.L["minimap_left_click_action"] },
+                { left = BPU.L["minimap_right_click"],      right = BPU.L["minimap_right_click_action"] },
+                { left = BPU.L["minimap_drag"],             right = BPU.L["minimap_drag_action"] },
+                { left = BPU.L["minimap_ctrl_right_click"], right = BPU.L["minimap_ctrl_right_click_action"] },
             },
         },
 

@@ -8,7 +8,7 @@
 
 local ADDON_NAME, addon = ...;
 
-local BattlePetUtility_LOADOUT_TEXT = "Enter a name for current pet loadout:|n|n%s";
+local BattlePetUtility_LOADOUT_TEXT = BPU.L["loadout_name_prompt"];
 local CURRENT_LOADOUT_NAME = nil;
 local unpackFunc = unpack or table.unpack;
 
@@ -93,7 +93,7 @@ local function RefreshLoadoutUI(keepListOpen)
 end
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_ERROR_LOCKED"] = {
-	text = "Cannot save loadout: all pet battle slots are not unlocked.",
+	text = BPU.L["cannot_save_loadout"],
 	button1 = ACCEPT,
 	timeout = 0,
 	whileDead = 1,
@@ -101,7 +101,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_ERROR_LOCKED"] = {
 };
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_ERROR_NOT_FOUND"] = {
-	text = "Cannot restore loadout: all saved pets cannot be found.",
+	text = BPU.L["cannot_restore_loadout"],
 	button1 = ACCEPT,
 	timeout = 0,
 	whileDead = 1,
@@ -131,7 +131,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_SAVE_EXISTS"] = {
 };
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_OVERWRITE"] = {
-	text = "Are you sure you want to overwrite \"%s\" with current loadout?",
+	text = BPU.L["overwrite_confirm"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function(self)
@@ -145,7 +145,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_OVERWRITE"] = {
 };
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_RESTORE"] = {
-	text = "Are you sure you want to restore loadout \"%s\"?",
+	text = BPU.L["restore_confirm"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function(self)
@@ -158,7 +158,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_RESTORE"] = {
 };
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_DELETE"] = {
-	text = "Are you sure you want to |cffff5555delete|r loadout \"%s\"? The action cannot be undone.",
+	text = BPU.L["delete_confirm"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function(self)
@@ -171,7 +171,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_DELETE"] = {
 };
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_REMATCH_MANAGED"] = {
-	text = "Loadouts are managed by Rematch while it is enabled. Create, rename, and delete teams in Rematch.",
+	text = BPU.L["rematch_managed"],
 	button1 = ACCEPT,
 	timeout = 0,
 	whileDead = 1,
@@ -179,7 +179,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_REMATCH_MANAGED"] = {
 };
 	
 StaticPopupDialogs["BattlePetUtility_LOADOUT_SAVE"] = {
-	text = "Enter a name for current pet loadout:",
+	text = BPU.L["enter_loadout_name"],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	hasEditBox = 1,
@@ -326,7 +326,7 @@ function addon:GetRematchLoadouts()
 end
 	
 StaticPopupDialogs["BattlePetUtility_LOADOUT_RENAME"] = {
-	text = "Enter a new name for the loadout:",
+	text = BPU.L["enter_new_loadout_name"],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	hasEditBox = 1,
@@ -686,7 +686,7 @@ function BattlePetUtilityFrameLoadouts_UpdateList()
 				button.name:Hide();
 				
 				button.errorText:Show();
-				button.errorText:SetText("No Results");
+				button.errorText:SetText(BPU.L["no_results"]);
 				
 				button:SetScript("OnEnter", nil);
 				button:SetScript("OnLeave", nil);
@@ -726,23 +726,23 @@ function BattlePetUtilityLoadoutsButton_OnEnter(self)
 	GameTooltip:SetPoint("RIGHT", self, "LEFT", -1, 0);
 	GameTooltip:SetOwner(self, "ANCHOR_PRESERVE");
 	
-	GameTooltip:AddLine("Loadout: |cffffffff" .. self.data.name .. "|r");
+	GameTooltip:AddLine(BPU.L["loadout_tooltip_prefix"] .. self.data.name .. "|r");
 	GameTooltip:AddLine("|n");
 	GameTooltip:AddLine(addon:GetPetLoadoutText(self.data.pets));
 	
 	if(self.data.isRematch) then
 		GameTooltip:AddLine("|n");
-		GameTooltip:AddLine("|cff58be81Managed by Rematch|r");
-		GameTooltip:AddLine("Left-Click |cffffffffLoad this Rematch team");
+		GameTooltip:AddLine(BPU.L["managed_by_rematch"]);
+		GameTooltip:AddLine(BPU.L["load_rematch_team"]);
 	elseif(not self.hasMissingPet) then
-		GameTooltip:AddLine("Left-Click |cffffffffRestore this loadout");
+		GameTooltip:AddLine(BPU.L["restore_loadout"]);
 	else
-		GameTooltip:AddLine("|cffff5555One or more pets are missing and this saved loadout is invalid");
+		GameTooltip:AddLine(BPU.L["missing_pets_invalid"]);
 		GameTooltip:AddLine("|n");
-		GameTooltip:AddLine("Left-Click |cffffffffDelete this loadout");
+		GameTooltip:AddLine(BPU.L["delete_this_loadout"]);
 	end
 	
-	GameTooltip:AddLine("Right-Click |cffffffffOpen options");
+	GameTooltip:AddLine(BPU.L["open_options"]);
 	
 	GameTooltip:Show();
 end
@@ -881,21 +881,21 @@ function BattlePetUtilityFrameLoadouts_OpenContextMenu(relativeFrame)
 			notCheckable = true,
 		},
 		{
-			text = "Rename",
+			text = BPU.L["rename"],
 			func = function()
 				StaticPopup_Show("BattlePetUtility_LOADOUT_RENAME", data.name, nil, data.name);
 			end,
 			notCheckable = true,
 		},
 		{
-			text = "Overwrite",
+			text = BPU.L["overwrite"],
 			func = function()
 				StaticPopup_Show("BattlePetUtility_LOADOUT_OVERWRITE", data.name, nil, data.name);
 			end,
 			notCheckable = true,
 		},
 		{
-			text = "Delete",
+			text = BPU.L["delete"],
 			func = function()
 				StaticPopup_Show("BattlePetUtility_LOADOUT_DELETE", data.name, nil, data.name);
 			end,
@@ -908,7 +908,7 @@ function BattlePetUtilityFrameLoadouts_OpenContextMenu(relativeFrame)
 		contextMenuData[4].disabled = true;
 		contextMenuData[5].disabled = true;
 		tinsert(contextMenuData, {
-			text = "Open Rematch",
+			text = BPU.L["open_rematch"],
 			func = function()
 				if(Rematch and Rematch.frame and type(Rematch.frame.Toggle) == "function") then
 					Rematch.frame:Toggle();

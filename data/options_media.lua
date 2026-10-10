@@ -288,7 +288,7 @@ function addon:GetWindowOpacityMenu()
 	for _, value in ipairs(opacityOptions) do
 		local opacity = value
 		tinsert(menu, {
-			text = string.format("%d%%", opacity * 100),
+			text = string.format(BPU.L["progress_percent"], opacity * 100),
 			func = function()
 				addon:SetWindowOpacity(opacity)
 				addon.RefreshDropdownMenu(addon.ContextMenu)
@@ -308,7 +308,7 @@ function addon:GetWindowScaleMenu()
 
 	for index, scale in ipairs(windowScales) do
 		tinsert(menu, {
-			text = string.format("%d%%", scale * 100),
+			text = string.format(BPU.L["progress_percent"], scale * 100),
 			func = function()
 				addon:SetWindowScale(scale)
 				addon.RefreshDropdownMenu(addon.ContextMenu)

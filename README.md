@@ -166,6 +166,37 @@ you want to use.
 - Update the pet journal or change zones to refresh collection data.
 - Include the current zone and optional-addon list when reporting a problem.
 
+## Localization
+
+Battle Pet Utility supports **12 WoW client locales** with full UI translation:
+
+| Locale | Language | Status |
+|--------|----------|--------|
+| enUS | English (US) | Complete |
+| deDE | German | Complete |
+| esES | Spanish (Spain) | Complete |
+| esMX | Spanish (Mexico) | Complete |
+| frFR | French | Complete |
+| itIT | Italian | Complete |
+| koKR | Korean | Complete |
+| ptBR | Portuguese (Brazil) | Complete |
+| ptPT | Portuguese (Portugal) | Complete |
+| ruRU | Russian | Complete |
+| zhCN | Chinese (Simplified) | Complete |
+| zhTW | Chinese (Traditional) | Complete |
+
+All user-visible strings—options, tooltips, dialogs, and messages—are
+translated for each supported locale. The addon automatically selects the
+correct language based on your WoW client locale.
+
+### For Translators
+
+To contribute a translation or fix an existing one, see the
+[localization guide](locales/README.md) in the `locales/` directory. Each
+locale file is self-contained and can be edited independently.
+
+---
+
 ## Documentation
 
 - [Release history](docs/CHANGES.md)

@@ -63,7 +63,7 @@ function addon:GetDatabrokerMenuData()
             text = addon.ADDON_TITLE_COLORED or "|cffb512fcB|r|cffffffffattle |cffb512fcP|r|cffffffffet |cffb512fcU|r|cfffffffftility|r|cffb512fc!|r", isTitle = true, notCheckable = true,
         },
         {
-            text = "Show wounded pets",
+            text = BPU.L["show_wounded_pets"],
             func = function()
                 self.db.global.Broker.ShowWoundedPets = not self.db.global.Broker.ShowWoundedPets
                 addon:UpdateDatabrokerText()
@@ -72,7 +72,7 @@ function addon:GetDatabrokerMenuData()
             isNotRadio = true,
         },
         {
-            text = "Show pet charms",
+            text = BPU.L["show_pet_charms"],
             func = function()
                 self.db.global.Broker.ShowPetCharms = not self.db.global.Broker.ShowPetCharms
                 addon:UpdateDatabrokerText()
@@ -84,7 +84,7 @@ function addon:GetDatabrokerMenuData()
             text = "", isTitle = true, notCheckable = true, disabled = true,
         },
         {
-            text = "Always resummon companion",
+            text = BPU.L["always_resummon"],
             func = function()
                 self.db.global.AutoSummonPet = not self.db.global.AutoSummonPet
                 addon:UpdateDatabrokerText()
@@ -97,20 +97,20 @@ function addon:GetDatabrokerMenuData()
             hasArrow   = true,
             menuList   = {
                 {
-                    text = "Resummon Options", isTitle = true, notCheckable = true,
+                    text = BPU.L["resummon_options"], isTitle = true, notCheckable = true,
                 },
                 {
-                    text    = "Last used pet",
+                    text    = BPU.L["last_used_pet"],
                     func    = function() self.db.global.AutoSummonMode = E.AUTO_SUMMON_MODE.LAST_PET; addon:UpdateAutoResummon(true) end,
                     checked = function() return self.db.global.AutoSummonMode == E.AUTO_SUMMON_MODE.LAST_PET end,
                 },
                 {
-                    text    = "Random favorite pet",
+                    text    = BPU.L["random_favorite_pet"],
                     func    = function() self.db.global.AutoSummonMode = E.AUTO_SUMMON_MODE.FAVORITE; addon:UpdateAutoResummon(true) end,
                     checked = function() return self.db.global.AutoSummonMode == E.AUTO_SUMMON_MODE.FAVORITE end,
                 },
                 {
-                    text    = "Any random pet",
+                    text    = BPU.L["any_random_pet"],
                     func    = function() self.db.global.AutoSummonMode = E.AUTO_SUMMON_MODE.ANY; addon:UpdateAutoResummon(true) end,
                     checked = function() return self.db.global.AutoSummonMode == E.AUTO_SUMMON_MODE.ANY end,
                 },
@@ -120,7 +120,7 @@ function addon:GetDatabrokerMenuData()
             text = "", isTitle = true, notCheckable = true, disabled = true,
         },
         {
-            text         = "Battle Pet Utility! Options",
+            text         = BPU.L["options_title"],
             notCheckable = true,
             hasArrow     = true,
             menuList     = addon:GetPrimaryMenuData(),
@@ -151,16 +151,16 @@ function addon:InitializeDatabroker()
         OnTooltipShow = function(tooltip)
             if not tooltip or not tooltip.AddLine then return end
             tooltip:AddLine(TEX_PET_BUDDY_ICON .. " " .. (addon.ADDON_TITLE_COLORED or "|cffb512fcB|r|cffffffffattle |cffb512fcP|r|cffffffffet |cffb512fcU|r|cfffffffftility|r|cffb512fc!|r"))
-            tooltip:AddLine("|cffd9c6ffBattle Pet HUD|r")
+            tooltip:AddLine(BPU.L["battle_pet_hud"])
             tooltip:AddLine(" ")
-            tooltip:AddLine("Active Pets")
+            tooltip:AddLine(BPU.L["active_pets"])
 
             for slotIndex = 1, 3 do
                 local petID, _, _, _, locked = C_PetJournal.GetPetLoadOutInfo(slotIndex)
                 if locked then
-                    tooltip:AddDoubleLine(string.format("Slot %d", slotIndex), "|cffffee00Locked|r")
+                    tooltip:AddDoubleLine(string.format(BPU.L["slot_format"], slotIndex), BPU.L["locked"])
                 elseif not petID then
-                    tooltip:AddDoubleLine(string.format("Slot %d", slotIndex), "|cffffee00Empty|r")
+                    tooltip:AddDoubleLine(string.format(BPU.L["slot_format"], slotIndex), BPU.L["empty_slot"])
                 else
                     local speciesID, customName, level, _, _, _, _, speciesName, icon, petType = C_PetJournal.GetPetInfoByPetID(petID)
                     local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
@@ -168,7 +168,7 @@ function addon:InitializeDatabroker()
                     local displayIcon  = icon or PET_BUDDY_ICON
                     local typeIndex    = petType or 1
                     local typeSuffix   = PET_TYPE_SUFFIX[typeIndex] or PET_TYPE_SUFFIX[1]
-                    local petTypeName  = _G["BATTLE_PET_NAME_" .. tostring(typeIndex)] or "Unknown"
+                    local petTypeName  = _G["BATTLE_PET_NAME_" .. tostring(typeIndex)] or BPU.L["unknown_zone"]
                     local petTypeIcon  = PET_TYPE_ICON_PATTERN:format(typeSuffix)
                     local isHurt       = (tonumber(health) or 0) < (tonumber(maxHealth) or 0)
                     local rarityColor  = GetSafeRarityColor(rarity)
@@ -215,20 +215,20 @@ function addon:InitializeDatabroker()
                     if speciesID then
                         local _, _, _, _, rarity = C_PetJournal.GetPetStats(addon.db.char.AutoSummonLastPetID)
                         local rarityColor = GetSafeRarityColor(rarity)
-                        tooltip:AddDoubleLine("Current Auto Summon Companion",
+                        tooltip:AddDoubleLine(BPU.L["current_companion"],
                             string.format("%s[%d] %s|r", rarityColor.hex or "|cffffffff", tonumber(level) or 0, customName or speciesName or "Unknown Pet"))
                     else
                         addon.db.char.AutoSummonLastPetID = nil
-                        tooltip:AddDoubleLine("Current Auto Summon Companion", "|cffff5555No companion|r")
+                        tooltip:AddDoubleLine(BPU.L["current_companion"], BPU.L["no_companion"])
                     end
                 else
-                    tooltip:AddDoubleLine("Current Auto Summon Companion", "|cffff5555No companion|r")
+                    tooltip:AddDoubleLine(BPU.L["current_companion"], BPU.L["no_companion"])
                 end
                 tooltip:AddLine(" ")
             end
 
-            tooltip:AddLine("Left-Click |cffffffffToggle Battle Pet Utility!|h")
-            tooltip:AddLine("Right-Click |cffffffffShow options|h")
+            tooltip:AddLine(BPU.L["left_click_toggle"])
+            tooltip:AddLine(BPU.L["right_click_options"])
         end,
         OnLeave = function() end,
     })
@@ -249,7 +249,7 @@ function addon:UpdateDatabrokerText()
     end
 
     if addon.db.global.AutoSummonPet and not self.db.char.AutoSummonLastPetID then
-        table.insert(strings, "|cffff5555No companion|r")
+        table.insert(strings, BPU.L["no_companion"])
     end
 
     if self.db.global.Broker.ShowPetCharms then

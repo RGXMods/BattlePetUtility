@@ -1294,7 +1294,7 @@ function addon:_DoUpdatePets()
 					
 					if(slotIndex == 1) then
 						BattlePetUtilityFrameButtons:Hide();
-						petFrame.slotInfoText:SetText("Learn Battle Pet Training to Unlock This Slot");
+						petFrame.slotInfoText:SetText(BPU.L["learn_training"]);
 					elseif(slotIndex == 2) then
 						petFrame.slotInfoText:SetText("Earn Achievement |cffffff00[Newbie]|r to Unlock This Slot");
 					elseif(slotIndex == 3) then
@@ -1306,7 +1306,7 @@ function addon:_DoUpdatePets()
 					petFrame.petName:SetText("|cffffee00Empty Slot|r");
 					
 					petFrame.slotInfoText:Show();
-					petFrame.slotInfoText:SetText("Add a Battle Pet to This Slot");
+					petFrame.slotInfoText:SetText(BPU.L["add_pet_to_slot"]);
 				end
 			end
 			
@@ -1323,7 +1323,7 @@ function addon:_DoUpdatePets()
 	if(type(BattlePetUtilityFrameLoadouts_UpdateList) == "function") then
 		local ok, err = pcall(BattlePetUtilityFrameLoadouts_UpdateList);
 		if(not ok) then
-			self:PrintDebug("Loadout list refresh failed: " .. tostring(err));
+			self:PrintDebug(BPU.L["debug_loadout_refresh_failed"] .. tostring(err));
 		end
 	end
 
@@ -1840,7 +1840,7 @@ end
 
 function addon:PLAYER_REGEN_DISABLED()
 	self.CombatExitTimer = 0;
-	self:PrintDebug("Entered combat, summon blocked");
+	self:PrintDebug(BPU.L["debug_combat_summon_blocked"]);
 
 	if(self.db.global.HideInCombat and BattlePetUtilityFrame:IsShown()) then
 		BattlePetUtilityFrame:Hide();
@@ -1850,7 +1850,7 @@ end
 
 function addon:PLAYER_REGEN_ENABLED()
 	self.CombatExitTimer = GetTime();
-	self:PrintDebug("Exited combat, will attempt summon in " .. AUTOSUMMON_BLOCK_AFTER_COMBAT .. "s");
+	self:PrintDebug(BPU.L["debug_combat_summon_resume"] .. AUTOSUMMON_BLOCK_AFTER_COMBAT .. "s");
 
 	if(self.db.global.HideInCombat and self.CombatHidden) then
 		BattlePetUtilityFrame:Show();
@@ -1910,7 +1910,7 @@ addon.CombatExitTimer = addon.CombatExitTimer or 0;
 hooksecurefunc("Dismount", function()
 	if(not InCombatLockdown()) then
 		addon.SummonDisabledTimer = GetTime();
-		addon:PrintDebug("Dismount detected, blocking summon for " .. AUTOSUMMON_BLOCK_AFTER_DISMOUNT .. "s");
+		addon:PrintDebug(BPU.L["debug_dismount_summon_blocked"] .. AUTOSUMMON_BLOCK_AFTER_DISMOUNT .. "s");
 	end
 end);
 

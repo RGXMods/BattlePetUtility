@@ -1,7 +1,7 @@
 local ADDON_NAME, addon = ...;
 local RGX = _G.RGXFramework;
 
-local ZONE_TRACKER_TITLE = "Zone Pets";
+local ZONE_TRACKER_TITLE = BPU.L["zone_pets"];
 local MAX_TRACKED_PET_NAMES = 3;
 local MAX_TOOLTIP_PET_LINES = 30;
 local MAX_VISIBLE_ZONE_LINES = 4;
@@ -164,7 +164,7 @@ local function GetPetTrackerSnapshotForMap(mapID)
 							end
 						end
 
-						name = name or "Unknown";
+						name = name or BPU.L["unknown_zone"];
 						allNames[#allNames + 1] = {
 							name = name,
 							quality = quality,
@@ -200,7 +200,7 @@ end
 
 local function GetSpeciesName(speciesID)
 	if(not speciesID or not C_PetJournal or type(C_PetJournal.GetPetInfoBySpeciesID) ~= "function") then
-		return "Unknown";
+		return BPU.L["unknown_zone"];
 	end
 
 	local name = C_PetJournal.GetPetInfoBySpeciesID(speciesID);
@@ -477,11 +477,11 @@ local function AddTooltipPetLines(tooltip, snapshot)
 	local shown = 0;
 	if(#missingEntries > 0) then
 		GameTooltip:AddLine(" ");
-		GameTooltip:AddLine("Missing", 1.0, 0.82, 0.0);
+		GameTooltip:AddLine(BPU.L["missing"], 1.0, 0.82, 0.0);
 		for _, petInfo in ipairs(missingEntries) do
 			if(shown >= MAX_TOOLTIP_PET_LINES) then break end
 			local iconMarkup = petInfo.icon and ("|T" .. tostring(petInfo.icon) .. ":" .. TOOLTIP_ICON_SIZE .. ":" .. TOOLTIP_ICON_SIZE .. ":0:0|t ") or "";
-			local name = petInfo.name or "Unknown";
+			local name = petInfo.name or BPU.L["unknown_zone"];
 			GameTooltip:AddLine(iconMarkup .. "|cffff5555" .. name .. "|r", 1, 1, 1);
 			shown = shown + 1;
 		end
@@ -489,7 +489,7 @@ local function AddTooltipPetLines(tooltip, snapshot)
 
 	if(#collectedEntries > 0 and shown < MAX_TOOLTIP_PET_LINES) then
 		GameTooltip:AddLine(" ");
-		GameTooltip:AddLine("Collected", 1.0, 0.82, 0.0);
+		GameTooltip:AddLine(BPU.L["collected"], 1.0, 0.82, 0.0);
 		for _, petInfo in ipairs(collectedEntries) do
 			if(shown >= MAX_TOOLTIP_PET_LINES) then break end
 			local quality = tonumber(petInfo.quality) or 0;
@@ -503,7 +503,7 @@ local function AddTooltipPetLines(tooltip, snapshot)
 				hex = "|cffffffff";
 			end
 			local iconMarkup = petInfo.icon and ("|T" .. tostring(petInfo.icon) .. ":" .. TOOLTIP_ICON_SIZE .. ":" .. TOOLTIP_ICON_SIZE .. ":0:0|t ") or "";
-			local name = petInfo.name or "Unknown";
+			local name = petInfo.name or BPU.L["unknown_zone"];
 			GameTooltip:AddLine(iconMarkup .. hex .. name .. "|r", 1, 1, 1);
 			shown = shown + 1;
 		end
@@ -607,7 +607,7 @@ local function UpdateSpeciesLines(frame, snapshot)
 			line.subIcon:SetTexture(entry.sourceIcon);
 		end
 
-		line.text:SetText(entry.name or "Unknown");
+		line.text:SetText(entry.name or BPU.L["unknown_zone"]);
 		if(color) then
 			line.text:SetTextColor(color.r, color.g, color.b);
 		else
@@ -639,7 +639,7 @@ local function ResolveZoneProgress()
 		return {
 			state = "unavailable",
 			title = ZONE_TRACKER_TITLE,
-			detail = "Current zone is unavailable right now.",
+			detail = BPU.L["zone_unavailable"],
 			provider = nil,
 		};
 	end
@@ -714,7 +714,7 @@ local function ResolveZoneProgress()
 	return {
 		state = "unavailable",
 		title = bestKnownMapName,
-		detail = "No zone pet data is available for this zone yet.",
+		detail = BPU.L["no_zone_data"],
 		provider = nil,
 	};
 end
@@ -826,7 +826,7 @@ function addon:RefreshZoneTracker()
 	local visibleLines = 0;
 
 	if(snapshot.state == "ready") then
-		frame.value:SetFormattedText("%d / %d", snapshot.owned or 0, snapshot.total or 1);
+		frame.value:SetFormattedText(BPU.L["collected_count"], snapshot.owned or 0, snapshot.total or 1);
 		frame.bar:Show();
 		frame.bar:SetMinMaxValues(0, math.max(1, snapshot.total or 1));
 		frame.bar:SetValue(math.max(0, snapshot.owned or 0));
@@ -848,7 +848,7 @@ function addon:RefreshZoneTracker()
 		frame.bar:SetMinMaxValues(0, 1);
 		frame.bar:SetValue(0);
 		if(frame.bar.text) then
-			frame.bar.text:SetText("No zone pets");
+			frame.bar.text:SetText(BPU.L["no_zone_pets"]);
 		end
 		frame.bar:SetStatusBarColor(0.36, 0.36, 0.42, 1.0);
 		UpdateQualityBars(frame, snapshot);
@@ -859,7 +859,7 @@ function addon:RefreshZoneTracker()
 		frame.bar:SetMinMaxValues(0, 1);
 		frame.bar:SetValue(0);
 		if(frame.bar.text) then
-			frame.bar.text:SetText("Unavailable");
+			frame.bar.text:SetText(BPU.L["unavailable"]);
 		end
 		frame.bar:SetStatusBarColor(0.30, 0.30, 0.36, 1.0);
 		UpdateQualityBars(frame, snapshot);
@@ -911,15 +911,15 @@ function BattlePetUtility_ZoneTrackerMixin:OnEnter()
 	GameTooltip:AddLine("|T" .. logoPath .. ":18:18:0:0|t |cffffffffBattle Pet Utility|r|cffb512fc!|r  |cffb07fff" .. ZONE_TRACKER_TITLE .. "|r");
 
 	if(snapshot.state == "ready") then
-		GameTooltip:AddDoubleLine("Zone", snapshot.title or "-", 1, 1, 1, 0.9, 0.9, 0.9);
-		GameTooltip:AddDoubleLine("Collected", string.format("%d / %d", snapshot.owned or 0, snapshot.total or 0), 1, 1, 1, 0.9, 0.9, 0.9);
-		GameTooltip:AddDoubleLine("Progress", string.format("%d%%", math.floor((snapshot.percent or 0) * 100 + 0.5)), 1, 1, 1, 0.9, 0.9, 0.9);
+		GameTooltip:AddDoubleLine(BPU.L["zone_label"], snapshot.title or "-", 1, 1, 1, 0.9, 0.9, 0.9);
+		GameTooltip:AddDoubleLine(BPU.L["collected"], string.format(BPU.L["collected_count"], snapshot.owned or 0, snapshot.total or 0), 1, 1, 1, 0.9, 0.9, 0.9);
+		GameTooltip:AddDoubleLine(BPU.L["progress"], string.format(BPU.L["progress_percent"], math.floor((snapshot.percent or 0) * 100 + 0.5)), 1, 1, 1, 0.9, 0.9, 0.9);
 		AddTooltipPetLines(GameTooltip, snapshot);
 	elseif(snapshot.state == "empty") then
-		GameTooltip:AddDoubleLine("Zone", snapshot.title or "-", 1, 1, 1, 0.9, 0.9, 0.9);
+		GameTooltip:AddDoubleLine(BPU.L["zone_label"], snapshot.title or "-", 1, 1, 1, 0.9, 0.9, 0.9);
 		GameTooltip:AddLine(snapshot.detail or "", 0.9, 0.9, 0.9, true);
 	elseif(snapshot.detail) then
-		GameTooltip:AddDoubleLine("Zone", snapshot.title or "-", 1, 1, 1, 0.9, 0.9, 0.9);
+		GameTooltip:AddDoubleLine(BPU.L["zone_label"], snapshot.title or "-", 1, 1, 1, 0.9, 0.9, 0.9);
 		GameTooltip:AddLine(snapshot.detail, 0.9, 0.9, 0.9, true);
 	end
 
