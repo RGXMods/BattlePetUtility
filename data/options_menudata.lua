@@ -15,7 +15,7 @@ end
 
 function addon:GetPetItemsUtilityMenuData()
 	local menu = {}
-	tinsert(menu, { text = "Pet Items Options", isTitle = true, notCheckable = true })
+	tinsert(menu, { text = BPU.L["pet_items_options"], isTitle = true, notCheckable = true })
 
 	if type(addon.GetPetItemCategoryMenuData) == "function" then
 		local categories = addon:GetPetItemCategoryMenuData(false)
@@ -60,27 +60,27 @@ function addon:GetPrimaryMenuData()
 
 	local data = {
 		{
-			text = "Battle Pet Utility! Options", isTitle = true, notCheckable = true,
+			text = BPU.L["options_title"], isTitle = true, notCheckable = true,
 		},
 		{
-			text = "Battle Pet HUD and utility menu", isTitle = true, notCheckable = true, disabled = true,
+			text = BPU.L["options_subtitle"], isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
-			text = "Lock Battle Pet Utility!",
+			text = BPU.L["lock_bpu"],
 			func = function() self.db.global.IsFrameLocked = not self.db.global.IsFrameLocked end,
 			checked = function() return self.db.global.IsFrameLocked end,
 			isNotRadio = true,
 			keepShownOnClick = true,
 		},
 		{
-			text = "Hide when entering combat",
+			text = BPU.L["hide_in_combat"],
 			func = function() self.db.global.HideInCombat = not self.db.global.HideInCombat end,
 			checked = function() return self.db.global.HideInCombat end,
 			isNotRadio = true,
 			keepShownOnClick = true,
 		},
 		{
-			text = "Show welcome message on login",
+			text = BPU.L["show_welcome"],
 			func = function()
 				self.db.global.ShowWelcomeMessage = not self.db.global.ShowWelcomeMessage
 			end,
@@ -92,16 +92,16 @@ function addon:GetPrimaryMenuData()
 			text = "", isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
-			text = "Automation", isTitle = true, notCheckable = true,
+			text = BPU.L["automation"], isTitle = true, notCheckable = true,
 		},
 		{
-			text = "When starting pet battle",
+			text = BPU.L["pet_battle_behavior"],
 			notCheckable = true,
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = {
 				{
-					text = "Show",
+					text = BPU.L["show"],
 					func = function()
 						self.db.global.PetBattleVisiblityMode = E.VISIBILITY_MODE.SHOW
 						addon.RefreshDropdownMenu(addon.ContextMenu)
@@ -110,7 +110,7 @@ function addon:GetPrimaryMenuData()
 					keepShownOnClick = true,
 				},
 				{
-					text = "Hide",
+					text = BPU.L["hide"],
 					func = function()
 						self.db.global.PetBattleVisiblityMode = E.VISIBILITY_MODE.HIDE
 						addon.RefreshDropdownMenu(addon.ContextMenu)
@@ -119,7 +119,7 @@ function addon:GetPrimaryMenuData()
 					keepShownOnClick = true,
 				},
 				{
-					text = "Do nothing",
+					text = BPU.L["do_nothing"],
 					func = function()
 						self.db.global.PetBattleVisiblityMode = E.VISIBILITY_MODE.DO_NOTHING
 						addon.RefreshDropdownMenu(addon.ContextMenu)
@@ -130,7 +130,7 @@ function addon:GetPrimaryMenuData()
 			},
 		},
 		{
-			text = "Always resummon companion",
+			text = BPU.L["always_resummon"],
 			func = function()
 				self.db.global.AutoSummonPet = not self.db.global.AutoSummonPet
 				addon:UpdateDatabrokerText()
@@ -143,9 +143,9 @@ function addon:GetPrimaryMenuData()
 			keepShownOnClick = true,
 			hasArrow = true,
 			menuList = {
-				{ text = "Resummon Options", isTitle = true, notCheckable = true },
+				{ text = BPU.L["resummon_options"], isTitle = true, notCheckable = true },
 				{
-					text = "Last used pet",
+					text = BPU.L["last_used_pet"],
 					func = function()
 						self.db.global.AutoSummonMode = E.AUTO_SUMMON_MODE.LAST_PET
 						addon:UpdateAutoResummon(true)
@@ -155,7 +155,7 @@ function addon:GetPrimaryMenuData()
 					keepShownOnClick = true,
 				},
 				{
-					text = "Random favorite pet",
+					text = BPU.L["random_favorite_pet"],
 					func = function()
 						self.db.global.AutoSummonMode = E.AUTO_SUMMON_MODE.FAVORITE
 						addon:UpdateAutoResummon(true)
@@ -165,7 +165,7 @@ function addon:GetPrimaryMenuData()
 					keepShownOnClick = true,
 				},
 				{
-					text = "Any random pet",
+					text = BPU.L["any_random_pet"],
 					func = function()
 						self.db.global.AutoSummonMode = E.AUTO_SUMMON_MODE.ANY
 						addon:UpdateAutoResummon(true)
@@ -177,16 +177,16 @@ function addon:GetPrimaryMenuData()
 			},
 		},
 		{
-			text = "Automatically heal pets at stables",
+			text = BPU.L["auto_heal_pets"],
 			func = function() self.db.global.AutoHealPets = not self.db.global.AutoHealPets; AutoHealButton_OnShow(BattlePetUtilityAutoHealButton) end,
 			checked = function() return self.db.global.AutoHealPets end,
 			isNotRadio = true,
 			keepShownOnClick = true,
 			hasArrow = true,
 			menuList = {
-				{ text = "Auto Pet Healer", isTitle = true, notCheckable = true },
+				{ text = BPU.L["auto_pet_healer"], isTitle = true, notCheckable = true },
 				{
-					text = "Also automatically accept the healing fee",
+					text = BPU.L["auto_heal_fee"],
 					func = function() self.db.global.AutoHealPetsFee = not self.db.global.AutoHealPetsFee end,
 					checked = function() return self.db.global.AutoHealPetsFee end,
 					isNotRadio = true,
@@ -199,10 +199,10 @@ function addon:GetPrimaryMenuData()
 			text = "", isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
-			text = "Displays", isTitle = true, notCheckable = true,
+			text = BPU.L["displays"], isTitle = true, notCheckable = true,
 		},
 		{
-			text = "Show main GUI body",
+			text = BPU.L["show_main_gui"],
 			func = function()
 				self.db.global.HideMainGUI = not self.db.global.HideMainGUI
 				addon:UpdateMinimizeState()
@@ -212,7 +212,7 @@ function addon:GetPrimaryMenuData()
 			keepShownOnClick = true,
 		},
 		{
-			text = "Show zone pet tracker",
+			text = BPU.L["show_zone_tracker"],
 			func = function()
 				self.db.global.ShowZoneTracker = not self.db.global.ShowZoneTracker
 				addon:RestoreSavedSettings()
@@ -222,9 +222,9 @@ function addon:GetPrimaryMenuData()
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = {
-				{ text = "Zone Tracker Options", isTitle = true, notCheckable = true },
+				{ text = BPU.L["zone_tracker_options"], isTitle = true, notCheckable = true },
 				{
-					text = "Show missing pets list",
+					text = BPU.L["show_missing_pets"],
 					func = function()
 						self.db.global.ShowZoneTrackerPetList = not self.db.global.ShowZoneTrackerPetList
 						addon:RefreshZoneTracker()
@@ -236,32 +236,32 @@ function addon:GetPrimaryMenuData()
 			},
 		},
 		{
-			text = "Show pet health and experience text",
+			text = BPU.L["show_pet_stats"],
 			func = function() self.db.global.PetStatsText.Enabled = not self.db.global.PetStatsText.Enabled; addon:RestoreSavedSettings() end,
 			checked = function() return self.db.global.PetStatsText.Enabled end,
 			isNotRadio = true,
 			keepShownOnClick = true,
 			hasArrow = true,
 			menuList = {
-				{ text = "Health Text", notCheckable = true, isTitle = true },
+				{ text = BPU.L["health_text"], notCheckable = true, isTitle = true },
 				{
-					text = "Show percentage",
+					text = BPU.L["show_percentage"],
 					func = function() self.db.global.PetStatsText.ShowHealthPercentage = not self.db.global.PetStatsText.ShowHealthPercentage; addon:UpdatePets() end,
 					checked = function() return self.db.global.PetStatsText.ShowHealthPercentage end,
 					isNotRadio = true,
 					keepShownOnClick = true,
 				},
 				{ text = "", isTitle = true, notCheckable = true, disabled = true },
-				{ text = "Experience Text", notCheckable = true, isTitle = true },
+				{ text = BPU.L["experience_text"], notCheckable = true, isTitle = true },
 				{
-					text = "Show percentage",
+					text = BPU.L["show_percentage"],
 					func = function() self.db.global.PetStatsText.ShowExperiencePercentage = not self.db.global.PetStatsText.ShowExperiencePercentage; addon:UpdatePets() end,
 					checked = function() return self.db.global.PetStatsText.ShowExperiencePercentage end,
 					isNotRadio = true,
 					keepShownOnClick = true,
 				},
 				{
-					text = "Display current experience",
+					text = BPU.L["show_current_exp"],
 					func = function()
 						self.db.global.PetStatsText.RemainingExperience = false
 						addon:UpdatePets()
@@ -271,7 +271,7 @@ function addon:GetPrimaryMenuData()
 					keepShownOnClick = true,
 				},
 				{
-					text = "Display experience to level",
+					text = BPU.L["show_exp_to_level"],
 					func = function()
 						self.db.global.PetStatsText.RemainingExperience = true
 						addon:UpdatePets()
@@ -283,7 +283,7 @@ function addon:GetPrimaryMenuData()
 			},
 		},
 		{
-			text = "Show pet charms",
+			text = BPU.L["show_pet_charms"],
 			func = function()
 				self.db.global.ShowPetCharms = not self.db.global.ShowPetCharms
 				addon:RestoreSavedSettings()
@@ -293,7 +293,7 @@ function addon:GetPrimaryMenuData()
 			keepShownOnClick = true,
 		},
 		{
-			text = "Show pet loadouts menu",
+			text = BPU.L["show_pet_loadouts"],
 			func = function()
 				local state = tonumber(self.db.global.PetUtilityMenuState) or 0
 				state = math.floor(state)
@@ -312,7 +312,7 @@ function addon:GetPrimaryMenuData()
 			keepShownOnClick = true,
 		},
 		{
-			text = "Show pet related items",
+			text = BPU.L["show_pet_items"],
 			func = function()
 				local state = NormalizeUtilityMenuState(self.db.global.PetUtilityMenuState)
 				local hasItems = (state == 1 or state == 3)
@@ -331,7 +331,7 @@ function addon:GetPrimaryMenuData()
 			menuList = addon:GetPetItemsUtilityMenuData(),
 		},
 		{
-			text = "Show pet tooltips",
+			text = BPU.L["show_pet_tooltips"],
 			func = function() self.db.global.ShowPetTooltips = not self.db.global.ShowPetTooltips end,
 			checked = function() return self.db.global.ShowPetTooltips end,
 			isNotRadio = true,
@@ -339,7 +339,7 @@ function addon:GetPrimaryMenuData()
 		},
 		},
 		{
-			text = "Show Pepe (cuteness)",
+			text = BPU.L["show_pepe"],
 			func = function()
 				self.db.global.ShowPepe = not self.db.global.ShowPepe
 				addon:RefreshHeaderArt()
@@ -354,9 +354,9 @@ function addon:GetPrimaryMenuData()
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = {
-				{ text = "Pepe position", notCheckable = true, isTitle = true },
+				{ text = BPU.L["pepe_position"], notCheckable = true, isTitle = true },
 				{
-					text = "Right side",
+					text = BPU.L["right_side"],
 					func = function()
 						self.db.global.PepeOnLeft = false
 						addon:RefreshHeaderArt()
@@ -366,7 +366,7 @@ function addon:GetPrimaryMenuData()
 					keepShownOnClick = true,
 				},
 				{
-					text = "Left side",
+					text = BPU.L["left_side"],
 					func = function()
 						self.db.global.PepeOnLeft = true
 						addon:RefreshHeaderArt()
@@ -378,7 +378,7 @@ function addon:GetPrimaryMenuData()
 			},
 		},
 		{
-			text = "Show minimap icon",
+			text = BPU.L["show_minimap_icon"],
 			func = function()
 				if type(addon.ToggleMinimapIcon) == "function" then
 					addon:ToggleMinimapIcon(nil)
@@ -396,7 +396,7 @@ function addon:GetPrimaryMenuData()
 			text = "", isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
-			text = "Frame Options", isTitle = true, notCheckable = true, disabled = true,
+			text = BPU.L["frame_options"], isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
 			text = "Font: " .. _fontLabel,
@@ -412,7 +412,7 @@ function addon:GetPrimaryMenuData()
 			menuList = addon:GetTextSizeMenuData(),
 		},
 		{
-			text = "Bar texture",
+			text = BPU.L["bar_texture"],
 			notCheckable = true,
 			hasArrow = true,
 			menuList = sharedMediaBarTextures,
@@ -432,7 +432,7 @@ function addon:GetPrimaryMenuData()
 			menuList = addon:GetWindowOpacityMenu(),
 		},
 		{
-			text = "Show title bar backdrop",
+			text = BPU.L["show_title_backdrop"],
 			func = function()
 				self.db.global.TitleBackdrop = not self.db.global.TitleBackdrop
 				addon:ApplyTitleBackdrop()

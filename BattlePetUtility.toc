@@ -15,8 +15,22 @@
 ## X-Category: UI Media, Pets & Companions, Miscellaneous
 ## X-Curse-Project-ID: 1476629
 ## X-Website: https://github.com/RGXMods/BattlePetUtility
+## X-Localizations: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ptPT, ruRU, zhCN, zhTW
 
 data/compat.lua
+
+locales/enUS.lua
+locales/deDE.lua
+locales/esES.lua
+locales/esMX.lua
+locales/frFR.lua
+locales/itIT.lua
+locales/koKR.lua
+locales/ptBR.lua
+locales/ptPT.lua
+locales/ruRU.lua
+locales/zhCN.lua
+locales/zhTW.lua
 
 data/core.lua
 data/zonespecies.lua

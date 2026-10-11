@@ -9,7 +9,7 @@ end
 function addon:OpenContextMenu(contextMenuData, parentframe, anchor, point, relativePoint)
 	if not _G.RGXDropdowns then
 		if type(addon.PrintMessage) == "function" then
-			addon:PrintMessage("|cffff5555RGX-Framework not found. Cannot open dropdown menu.|r")
+			addon:PrintMessage(BPU.L["rgx_not_found"])
 		end
 		return
 	end

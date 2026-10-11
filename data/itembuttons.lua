@@ -357,7 +357,7 @@ function addon:GetPetItemCategoryMenuData(includeTitle)
 	local menuData = {};
 	if(includeTitle) then
 		tinsert(menuData, {
-			text = "Quick Item Buttons",
+			text = BPU.L["quick_item_buttons"],
 			isTitle = true,
 			notCheckable = true,
 		});
@@ -1002,9 +1002,9 @@ function BattlePetUtilityFrameButton_OnEnter(self)
 		
 		if(not IsSpellUsableCompat(self.actionData)) then
 			if(addon:IsPlayerInCelestialTournament()) then
-				GameTooltip:AddLine("Cannot use while in Celestial Tournament.", 1, 0.2, 0.2);
+				GameTooltip:AddLine(BPU.L["celestial_tournament"], 1, 0.2, 0.2);
 			else
-				GameTooltip:AddLine("Cannot use right now.", 1, 0.2, 0.2);
+				GameTooltip:AddLine(BPU.L["cannot_use_now"], 1, 0.2, 0.2);
 			end
 		end
 	elseif(self.actionType == "item") then
@@ -1012,9 +1012,9 @@ function BattlePetUtilityFrameButton_OnEnter(self)
 		
 		if(not IsItemUsableCompat(self.actionData) and GetItemCountCompat(self.actionData) > 0) then
 			if(addon:IsPlayerInCelestialTournament()) then
-				GameTooltip:AddLine("Cannot use while in Celestial Tournament.", 1, 0.2, 0.2);
+				GameTooltip:AddLine(BPU.L["celestial_tournament"], 1, 0.2, 0.2);
 			else
-				GameTooltip:AddLine("Cannot use right now.", 1, 0.2, 0.2);
+				GameTooltip:AddLine(BPU.L["cannot_use_now"], 1, 0.2, 0.2);
 			end
 		end
 	elseif(self.actionType == "flyout") then
