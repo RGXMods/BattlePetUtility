@@ -1,5 +1,9 @@
 # Unreleased
 
+## Non-beta Candidate: [v2.3.26](changelogs/2.3.26.md)
+
+Retail 12.1.5 / Interface `120105`; client testing and publication pending.
+
 ## Changes
 
 - Display options reorganized: visibility toggles now live under Displays (including the moved main-body and minimap controls), with the double-negative Hide main GUI body replaced by Show main GUI body.

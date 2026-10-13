@@ -1,8 +1,8 @@
-## Interface: 120100
+## Interface: 120105
 ## X-Wago-ID: QKyqBlK7
 ## Title: |cffffffffBattle Pet Utility|r|cffb512fc!|r
 ## Notes: |n|r |cffb07fff/bpu -|r Open options panel
-## Version: v2.3.25
+## Version: v2.3.26
 ## Author: DonnieDice
 ## Category: RGX
 ## Group: RGX
