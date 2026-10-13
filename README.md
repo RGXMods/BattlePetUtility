@@ -198,11 +198,12 @@ locale file is self-contained and can be edited independently.
 ---
 
 ## Documentation
-
+-
 - [Release history](docs/CHANGES.md)
 - [Documentation index](docs/README.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Release process](docs/RELEASING.md)
+- [Agent Directives](docs/AGENT-DIRECTIVES.md)
 
 ## Support and Contributing
 
