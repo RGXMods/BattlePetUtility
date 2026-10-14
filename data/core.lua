@@ -1528,9 +1528,9 @@ function BattlePetUtility_PetCharmsMixin:OnEnter()
 	local _, charmsNumAmount, charmEntries = addon:GetPetCharmsInfo();
 	GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 	GameTooltip:ClearLines();
-	GameTooltip:AddLine("Pet Charms");
+	GameTooltip:AddLine(BPU.L["pet_charms_title"]);
 	GameTooltip:AddLine(" ");
-	GameTooltip:AddDoubleLine("Total", tostring(charmsNumAmount or 0), 1, 1, 1, 1, 1, 1);
+	GameTooltip:AddDoubleLine(BPU.L["pet_charms_total"], tostring(charmsNumAmount or 0), 1, 1, 1, 1, 1, 1);
 
 	if(type(charmEntries) == "table" and #charmEntries > 0) then
 		table.sort(charmEntries, function(a, b)
@@ -1784,11 +1784,11 @@ function BattlePetUtilityFrameMinimizeButton_OnEnter(self)
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT");
 	GameTooltip:ClearLines();
 	if(addon:IsFrameMinimized()) then
-		GameTooltip:AddLine("Restore Battle Pet Utility|cffb512fc!|r");
-		GameTooltip:AddLine("Show the full battle pet HUD.", 0.9, 0.9, 0.9, true);
+		GameTooltip:AddLine(BPU.L["hud_restore"]);
+		GameTooltip:AddLine(BPU.L["hud_restore_help"], 0.9, 0.9, 0.9, true);
 	else
-		GameTooltip:AddLine("Minimize Battle Pet Utility|cffb512fc!|r");
-		GameTooltip:AddLine("Collapse to the title bar.", 0.9, 0.9, 0.9, true);
+		GameTooltip:AddLine(BPU.L["hud_minimize"]);
+		GameTooltip:AddLine(BPU.L["hud_minimize_help"], 0.9, 0.9, 0.9, true);
 	end
 	GameTooltip:Show();
 end

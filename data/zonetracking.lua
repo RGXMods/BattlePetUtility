@@ -439,7 +439,7 @@ local function GetPetSummaryText(snapshot)
 
 	local missingNames = snapshot.missingNames or {};
 	if(#missingNames == 0) then
-		return "All zone pets collected";
+		return BPU.L["zone_pets_collected"];
 	end
 
 	local shown = {};
