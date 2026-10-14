@@ -7,7 +7,7 @@
 		<Scripts>
 			<OnShow>
 				AutoHealButton_OnShow(self);
-				self.text:SetText("Auto Heal Pets")
+				self.text:SetText(BPU.L["auto_heal_pets_button"])
 				self:SetFrameLevel(GossipFrame:GetFrameLevel()+2);
 			</OnShow>
 			<OnClick>
@@ -199,7 +199,7 @@
 				<Size x="208" y="30"/>
 				<Layers>
 					<Layer level="OVERLAY">
-						<FontString name="$parentLabel" parentKey="label" inherits="BattlePetUtilityFontSmall" justifyH="LEFT" justifyV="CENTER" text="Zone Pets">
+						<FontString name="$parentLabel" parentKey="label" inherits="BattlePetUtilityFontSmall" justifyH="LEFT" justifyV="CENTER">
 							<Size x="128" y="12"/>
 							<Anchors>
 								<Anchor point="TOPLEFT" x="8" y="-5"/>

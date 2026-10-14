@@ -41,8 +41,8 @@ local ITEM_BUTTON_CATEGORIES = {
 		menuText = "Battle stones",
 		type = "item",
 		iconTexture = "INTERFACE\\ICONS\\Icon_UpgradeStone_Rare.blp",
-		tooltipTitle = "Battle Stones",
-		tooltipDescription = "Pet quality and level-up stones",
+		tooltipTitle = BPU.L["battle_stones"],
+		tooltipDescription = BPU.L["battle_stones_tooltip"],
 		target = "target",
 		defaultEnabled = false,
 		
@@ -81,11 +81,11 @@ local ITEM_BUTTON_CATEGORIES = {
 	
 	{
 		key = "pet_consumables",
-		menuText = "Consumables and toys",
+		menuText = BPU.L["consumables_and_toys"],
 		type = "item",
 		iconTexture = "Interface\\ICONS\\INV_Misc_Petbiscuit_01.blp",
 		tooltipTitle = "Consumables and Toys",
-		tooltipDescription = "Treats, utility items, toys, and costumes",
+		tooltipDescription = BPU.L["consumables_tooltip"],
 		target = "target",
 		defaultEnabled = false,
 		
@@ -147,11 +147,11 @@ local ITEM_BUTTON_CATEGORIES = {
 	},
 	{
 		key = "pet_rewards",
-		menuText = "Supply bags and containers",
+		menuText = BPU.L["supply_bags_containers"],
 		type = "item",
 		iconTexture = "Interface\\ICONS\\INV_Misc_Bag_10_Black.blp",
 		tooltipTitle = "Supply Bags and Containers",
-		tooltipDescription = "Pet supply bags and battle pet container items",
+		tooltipDescription = BPU.L["supply_bags_tooltip"],
 		target = "target",
 		defaultEnabled = false,
 
@@ -189,11 +189,11 @@ local ITEM_BUTTON_CATEGORIES = {
 	},
 	{
 		key = "pet_currencies",
-		menuText = "Pet currencies",
+		menuText = BPU.L["pet_currencies"],
 		type = "item",
 		iconTexture = "Interface\\ICONS\\INV_Misc_Coin_01.blp",
 		tooltipTitle = "Pet Currencies",
-		tooltipDescription = "Charm and pet-related currency items",
+		tooltipDescription = BPU.L["pet_currencies_tooltip"],
 		target = "target",
 		defaultEnabled = false,
 

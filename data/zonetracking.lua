@@ -439,7 +439,7 @@ local function GetPetSummaryText(snapshot)
 
 	local missingNames = snapshot.missingNames or {};
 	if(#missingNames == 0) then
-		return "All zone pets collected";
+		return BPU.L["zone_pets_collected"];
 	end
 
 	local shown = {};
@@ -449,7 +449,7 @@ local function GetPetSummaryText(snapshot)
 
 	local summary = table.concat(shown, ", ");
 	if(#missingNames > MAX_TRACKED_PET_NAMES) then
-		summary = summary .. ", +" .. tostring(#missingNames - MAX_TRACKED_PET_NAMES) .. " more";
+		summary = summary .. BPU.L["more_format_summary"] .. tostring(#missingNames - MAX_TRACKED_PET_NAMES) .. " more";
 	end
 
 	return summary;
@@ -618,7 +618,7 @@ local function UpdateSpeciesLines(frame, snapshot)
 
 	if(#entries > shownCount and shownCount > 0) then
 		local line = lines[shownCount];
-		line.text:SetText((line.text:GetText() or "") .. " +" .. tostring(#entries - shownCount) .. " more");
+		line.text:SetText((line.text:GetText() or "") .. BPU.L["more_format_line"] .. tostring(#entries - shownCount) .. " more");
 	end
 
 	return shownCount;
@@ -629,7 +629,7 @@ local function ResolveZoneProgress()
 		return {
 			state = "unavailable",
 			title = ZONE_TRACKER_TITLE,
-			detail = "Map data unavailable on this client.",
+			detail = BPU.L["map_data_unavailable"],
 			provider = nil,
 		};
 	end
@@ -676,7 +676,7 @@ local function ResolveZoneProgress()
 			return {
 				state = "empty",
 				title = bestKnownMapName,
-				detail = "No trackable wild pets found for this zone.",
+				detail = BPU.L["no_trackable_wild_pets"],
 				provider = "native",
 				resolvedMapID = aliasMapID,
 			};
@@ -686,7 +686,7 @@ local function ResolveZoneProgress()
 			return {
 				state = "empty",
 				title = bestKnownMapName,
-				detail = "No trackable wild pets found for this zone.",
+				detail = BPU.L["no_trackable_wild_pets"],
 				provider = "PetTracker",
 				resolvedMapID = aliasMapID,
 			};
@@ -697,7 +697,7 @@ local function ResolveZoneProgress()
 		return {
 			state = "empty",
 			title = bestKnownMapName,
-			detail = "No trackable wild pets found for this zone.",
+			detail = BPU.L["no_trackable_wild_pets"],
 			provider = "native",
 		};
 	end
@@ -706,7 +706,7 @@ local function ResolveZoneProgress()
 		return {
 			state = "empty",
 			title = bestKnownMapName,
-			detail = "No trackable wild pets found for this zone.",
+			detail = BPU.L["no_trackable_wild_pets"],
 			provider = "PetTracker",
 		};
 	end
