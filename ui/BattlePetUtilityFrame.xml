@@ -7,7 +7,7 @@
 		<Scripts>
 			<OnShow>
 				AutoHealButton_OnShow(self);
-				self.text:SetText("Auto Heal Pets")
+				self.text:SetText(BPU.L["auto_heal_pets_button"])
 				self:SetFrameLevel(GossipFrame:GetFrameLevel()+2);
 			</OnShow>
 			<OnClick>

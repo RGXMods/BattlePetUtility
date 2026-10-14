@@ -164,11 +164,11 @@ function addon:UpdateWoundedText()
 	local remainingCooldown = addon:GetRemainingHealCooldown();
 	
 	if(addon.PetHealer.IsGarrisonNPC and remainingCooldown > 0) then
-		text = string.format("Heal and Revive Pets (%s / %d wounded)", FormatTime(remainingCooldown), wounded);
+		text = string.format(BPU.L["heal_and_revive_pets"], FormatTime(remainingCooldown), wounded);
 	elseif(addon.PetHealer.IsGarrisonNPC and addon.PetHealer.IsFreeNPC) then
-		text = string.format("Heal and Revive Pets (free / %d wounded)", wounded);
+		text = string.format(BPU.L["heal_and_revive_free"], wounded);
 	else
-		text = string.format("Heal and Revive Pets (%s / %d wounded)", GetCoinTextureString(1000), wounded);
+		text = string.format(BPU.L["heal_and_revive_pets"], GetCoinTextureString(1000), wounded);
 	end
 	
 	_G['GossipTitleButton' .. addon.PetHealer.GossipID]:SetText(text);

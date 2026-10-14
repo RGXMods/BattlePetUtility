@@ -389,8 +389,8 @@ function addon:GetPrimaryMenuData()
 			end,
 			isNotRadio = true,
 			keepShownOnClick = true,
-			tooltipTitle = "Minimap icon visibility",
-			tooltipText = "You can also right-click the minimap button for options, or use |cffb07fff/BPU icon off|r and |cffb07fff/BPU icon on|r.",
+			tooltipTitle = BPU.L["minimap_icon_visibility"],
+			tooltipText = BPU.L["minimap_icon_tooltip"],
 		},
 		{
 			text = "", isTitle = true, notCheckable = true, disabled = true,
@@ -399,13 +399,13 @@ function addon:GetPrimaryMenuData()
 			text = BPU.L["frame_options"], isTitle = true, notCheckable = true, disabled = true,
 		},
 		{
-			text = "Font: " .. _fontLabel,
+			text = BPU.L["font_label"] .. _fontLabel,
 			notCheckable = true,
 			hasArrow = true,
 			menuList = "bpu_fonts",
 		},
 		{
-			text = string.format("Font size (%d pt)", addon:GetCurrentFontSize()),
+			text = string.format(BPU.L["font_size_format"], addon:GetCurrentFontSize()),
 			notCheckable = true,
 			hasArrow = true,
 			keepShownOnClick = true,
@@ -418,14 +418,14 @@ function addon:GetPrimaryMenuData()
 			menuList = sharedMediaBarTextures,
 		},
 		{
-			text = string.format("Change scale (%d%%)", self.db.global.WindowScale * 100),
+			text = string.format(BPU.L["change_scale_format"], self.db.global.WindowScale * 100),
 			notCheckable = true,
 			hasArrow = true,
 			keepShownOnClick = true,
 			menuList = addon:GetWindowScaleMenu(),
 		},
 		{
-			text = string.format("Window opacity (%d%%)", math.floor((self.db.global.WindowOpacity or 1.0) * 100 + 0.5)),
+			text = string.format(BPU.L["window_opacity_format"], math.floor((self.db.global.WindowOpacity or 1.0) * 100 + 0.5)),
 			notCheckable = true,
 			hasArrow = true,
 			keepShownOnClick = true,

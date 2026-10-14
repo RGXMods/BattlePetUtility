@@ -109,7 +109,7 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_ERROR_NOT_FOUND"] = {
 };
 
 StaticPopupDialogs["BattlePetUtility_LOADOUT_SAVE_EXISTS"] = {
-	text = "Another loadout with the same name already exists. Do you want to overwrite?",
+	text = BPU.L["loadout_overwrite_confirm"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function(self)
@@ -596,7 +596,7 @@ function addon:GetSortedLoadouts()
 	
 	if(#loadoutData == 0) then
 		tinsert(loadoutData, {
-			name = "No loadouts",
+			name = BPU.L["no_loadouts"],
 			pets = {},
 			notFound = true,
 		});
@@ -874,7 +874,7 @@ function BattlePetUtilityFrameLoadouts_OpenContextMenu(relativeFrame)
 			text = data.name, isTitle = true, notCheckable = true,
 		},
 		{
-			text = data.isRematch and "Load (Rematch)" or "Restore",
+			text = data.isRematch and BPU.L["load_rematch_team"] or BPU.L["restore_loadout"],
 			func = function()
 				addon:RestoreLoadout(data);
 			end,

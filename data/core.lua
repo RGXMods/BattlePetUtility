@@ -256,7 +256,7 @@ end
 function addon:ShowWelcomeMessage()
 	if(not self.db or self.db.global.ShowWelcomeMessage == false) then return end
 
-	self:PrintMessage("Welcome! Use |cffb07fff/BPU|r to toggle, and |cffb07fff/BPU help|r for commands.");
+	self:PrintMessage(BPU.L["welcome_message"]);
 	self:PrintMessage("|cffffff00Version:|r |cff8080ff" .. GetAddonVersion() .. "|r");
 end
 
@@ -265,18 +265,18 @@ function addon:ToggleWelcomeMessage()
 
 	self.db.global.ShowWelcomeMessage = not self.db.global.ShowWelcomeMessage;
 	if(self.db.global.ShowWelcomeMessage) then
-		self:PrintMessage("|cff00ff00Welcome message enabled.|r");
+		self:PrintMessage(BPU.L["welcome_enabled"]);
 	else
-		self:PrintMessage("|cffff0000Welcome message disabled.|r");
+		self:PrintMessage(BPU.L["welcome_disabled"]);
 	end
 end
 
 function addon:PrintHelp()
 	self:PrintMessage("|cffffff00Battle Pet Utility|r|cffb512fc!|r |cffffff00Commands:|r");
 	self:PrintMessage(" |cffb07fff/BPU|r - Toggle Battle Pet Utility|cffb512fc!|r");
-	self:PrintMessage(" |cffb07fff/BPU help|r - Show command help");
-	self:PrintMessage(" |cffb07fff/BPU welcome|r - Toggle login welcome message");
-	self:PrintMessage(" |cffb07fff/BPU version|r - Show current version");
+	self:PrintMessage(BPU.L["help_help"]);
+	self:PrintMessage(BPU.L["help_welcome"]);
+	self:PrintMessage(BPU.L["help_version"]);
 	self:PrintMessage(" |cffb07fff/BPU icon on|r or |cffb07fffoff|r - Show/hide minimap icon");
 end
 
@@ -293,9 +293,9 @@ function addon:ToggleMinimapIcon(show)
 		self:UpdateMinimapIconVisibility();
 	end
 	if(show == false) then
-		self:PrintMessage("|cffffcc00Minimap icon hidden.|r Use |cffb07fff/BPU icon on|r to show it again.");
+		self:PrintMessage(BPU.L["minimap_hidden"]);
 	elseif(show == true) then
-		self:PrintMessage("|cff00ff00Minimap icon shown.|r");
+		self:PrintMessage(BPU.L["minimap_shown"]);
 	end
 end
 
@@ -1284,7 +1284,7 @@ function addon:_DoUpdatePets()
 				if(locked) then
 					petFrame.stats:Hide();
 					
-					petFrame.petName:SetText("|cffffee00Slot Locked|r");
+					petFrame.petName:SetText(BPU.L["slot_locked"]);
 					
 					petFrame.slotInfoText:Show();
 					
@@ -1296,14 +1296,14 @@ function addon:_DoUpdatePets()
 						BattlePetUtilityFrameButtons:Hide();
 						petFrame.slotInfoText:SetText(BPU.L["learn_training"]);
 					elseif(slotIndex == 2) then
-						petFrame.slotInfoText:SetText("Earn Achievement |cffffff00[Newbie]|r to Unlock This Slot");
+						petFrame.slotInfoText:SetText(BPU.L["earn_newbie"]);
 					elseif(slotIndex == 3) then
-						petFrame.slotInfoText:SetText("Earn Achievement |cffffff00[Just a Pup]|r to Unlock This Slot");
+						petFrame.slotInfoText:SetText(BPU.L["earn_pup"]);
 					end
 				elseif(not petID and locked == false) then
 					petFrame.stats:Hide();
 					
-					petFrame.petName:SetText("|cffffee00Empty Slot|r");
+					petFrame.petName:SetText(BPU.L["empty_slot"]);
 					
 					petFrame.slotInfoText:Show();
 					petFrame.slotInfoText:SetText(BPU.L["add_pet_to_slot"]);

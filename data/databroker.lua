@@ -137,8 +137,8 @@ function addon:InitializeDatabroker()
 
     addon.databroker = DB:NewDataObject(ADDON_NAME, {
         type  = "data source",
-        label = addon.ADDON_TITLE or "Battle Pet Utility!",
-        text  = addon.ADDON_TITLE or "Battle Pet Utility!",
+        label = addon.ADDON_TITLE or BPU.L["addon_title"],
+        text  = addon.ADDON_TITLE or BPU.L["addon_title"],
         icon  = PET_BUDDY_ICON,
         OnClick = function(frame, button)
             if button == "LeftButton" then
@@ -164,7 +164,7 @@ function addon:InitializeDatabroker()
                 else
                     local speciesID, customName, level, _, _, _, _, speciesName, icon, petType = C_PetJournal.GetPetInfoByPetID(petID)
                     local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
-                    local displayName  = customName or speciesName or "Unknown Pet"
+                    local displayName  = customName or speciesName or BPU.L["unknown_pet"]
                     local displayIcon  = icon or PET_BUDDY_ICON
                     local typeIndex    = petType or 1
                     local typeSuffix   = PET_TYPE_SUFFIX[typeIndex] or PET_TYPE_SUFFIX[1]
@@ -216,7 +216,7 @@ function addon:InitializeDatabroker()
                         local _, _, _, _, rarity = C_PetJournal.GetPetStats(addon.db.char.AutoSummonLastPetID)
                         local rarityColor = GetSafeRarityColor(rarity)
                         tooltip:AddDoubleLine(BPU.L["current_companion"],
-                            string.format("%s[%d] %s|r", rarityColor.hex or "|cffffffff", tonumber(level) or 0, customName or speciesName or "Unknown Pet"))
+                            string.format("%s[%d] %s|r", rarityColor.hex or "|cffffffff", tonumber(level) or 0, customName or speciesName or BPU.L["unknown_pet"]))
                     else
                         addon.db.char.AutoSummonLastPetID = nil
                         tooltip:AddDoubleLine(BPU.L["current_companion"], BPU.L["no_companion"])
@@ -259,7 +259,7 @@ function addon:UpdateDatabrokerText()
     end
 
     if #strings == 0 then
-        table.insert(strings, addon.ADDON_TITLE or "Battle Pet Utility!")
+        table.insert(strings, addon.ADDON_TITLE or BPU.L["addon_title"])
     end
 
     addon.databroker.text = table.concat(strings, "  ")
