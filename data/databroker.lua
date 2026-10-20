@@ -211,7 +211,10 @@ function addon:InitializeDatabroker()
 
             if addon.db.global.AutoSummonPet then
                 if addon.db.char.AutoSummonLastPetID then
-                    local speciesID, customName, level, _, _, _, _, speciesName = C_PetJournal.GetPetInfoByPetID(addon.db.char.AutoSummonLastPetID)
+                    local speciesID, customName, level, _, _, _, _, speciesName
+                    if addon.IsPetGUID and addon.IsPetGUID(addon.db.char.AutoSummonLastPetID) then
+                        speciesID, customName, level, _, _, _, _, speciesName = C_PetJournal.GetPetInfoByPetID(addon.db.char.AutoSummonLastPetID)
+                    end
                     if speciesID then
                         local _, _, _, _, rarity = C_PetJournal.GetPetStats(addon.db.char.AutoSummonLastPetID)
                         local rarityColor = GetSafeRarityColor(rarity)

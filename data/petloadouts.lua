@@ -222,6 +222,10 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_SAVE"] = {
 local function IsPetGUID(petID)
 	return type(petID) == "string" and string.match(petID, "^BattlePet%-") ~= nil;
 end
+-- Exposed for other modules: stored petIDs saved before the journal moved
+-- to pet GUIDs can still be numeric, and the pet-journal APIs throw C-side
+-- "Usage" errors (not nil returns) for non-GUID arguments.
+addon.IsPetGUID = IsPetGUID;
 
 function addon:IsRematchLoadoutsEnabled()
 	return type(Rematch) == "table"
@@ -384,7 +388,7 @@ function addon:GetPetLoadoutText(saved_loadout)
 		
 		local petString;
 		
-		if(petID and C_PetJournal.GetPetInfoByPetID(petID)) then
+		if(petID and IsPetGUID(petID) and C_PetJournal.GetPetInfoByPetID(petID)) then
 			local speciesID, customName, level, _, _, _, _, speciesName, _, petType = C_PetJournal.GetPetInfoByPetID(petID);
 			local health, maxHealth, _, _, rarity = C_PetJournal.GetPetStats(petID);
 			
@@ -487,7 +491,7 @@ function addon:RestoreLoadout(loadout_info)
 	if(not loadout) then return false end
 	
 	for slotIndex, data in ipairs(loadout) do
-		if(not C_PetJournal.GetPetInfoByPetID(data.petID)) then
+		if(not IsPetGUID(data.petID) or not C_PetJournal.GetPetInfoByPetID(data.petID)) then
 			StaticPopup_Show("BattlePetUtility_LOADOUT_ERROR_NOT_FOUND");
 			return;
 		end
@@ -637,7 +641,10 @@ function BattlePetUtilityFrameLoadouts_UpdateList()
 					
 					local petID = data.pets[i].petID;
 					
-					local speciesID, customName, level, _, _, _, _, name, icon, petType = C_PetJournal.GetPetInfoByPetID(petID);
+					local speciesID, customName, level, _, _, _, _, name, icon, petType;
+					if(IsPetGUID(petID)) then
+						speciesID, customName, level, _, _, _, _, name, icon, petType = C_PetJournal.GetPetInfoByPetID(petID);
+					end
 					
 					if(speciesID) then
 						local health, maxHealth, _, _, rarity = C_PetJournal.GetPetStats(petID);
