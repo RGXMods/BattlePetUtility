@@ -1,8 +1,13 @@
 # Unreleased
 
-## Non-beta Candidate: [v2.3.26](changelogs/2.3.26.md)
+## Non-beta Candidate: [v2.3.27](changelogs/2.3.27.md)
 
 Retail 12.1.5 / Interface `120105`; client testing and publication pending.
+
+## Fixes
+
+- Fixed repeated `Usage: GetPetInfoByID(petGUID)` errors when SavedVariables still held numeric petIDs from before the pet journal moved to pet GUIDs. Every stored-petID call site — loadout text, restore validation, the loadout button display, and the databroker companion tooltip — now routes through the `IsPetGUID` validator, so legacy IDs fall into the existing missing-pet handling instead of erroring on every PET_JOURNAL_LIST_UPDATE refresh (GitHub issue #3, merge request !15).
+# v2.3.26 - 2026-10-14
 
 ## Changes
 
