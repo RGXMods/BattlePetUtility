@@ -1,3 +1,8 @@
+## v2.3.28 - 2026-11-05
+
+- Releases are now built with our own packager and published to CurseForge, Wago and GitHub (and WoWInterface where a listing exists).
+- No gameplay changes.
+
 # Unreleased
 
 ## Non-beta Candidate: [v2.3.27](changelogs/2.3.27.md)
