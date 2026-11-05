@@ -6,6 +6,12 @@ curseforge:
   project-id: 1476629
 
 ignore:
+  - .ci
+  - scripts
+  - .gitlab
+  - .gitlab-ci.yml
+  - add_missing_keys.py
+  - apply_patches.py
   - .github
   - .gitignore
   - README.md
