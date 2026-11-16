@@ -43,16 +43,10 @@ the BattlePetUtility name.
 - **Battle-state handling:** Keeps the frame and controls synchronized when
   entering and leaving pet battles.
 
-### Loadouts and Integrations
+### Loadouts
 
 - **Native loadouts:** Saves account-wide teams with rename, overwrite,
   restore, and delete actions.
-- **Rematch integration:** Works with the Rematch team save/load flow when
-  Rematch is installed.
-- **PetTracker compatibility:** Uses PetTracker's live zone data when available
-  without competing with its pet-journal behavior.
-- **BattlePetBreedID support:** Shows enhanced breed information when that
-  optional addon is installed.
 
 ### Pet Utilities
 
@@ -86,15 +80,6 @@ the source of truth as Retail clients update.
 
 - World of Warcraft Retail
 - [RGX-Framework](https://github.com/RGXMods/RGX-Framework) as a required addon
-
-### Optional Addons
-
-- [Rematch](https://www.curseforge.com/wow/addons/rematch)
-- [PetTracker](https://www.curseforge.com/wow/addons/pettracker)
-- [Battle Pet BreedID](https://www.curseforge.com/wow/addons/battle-pet-breedid)
-
-Battle Pet Utility works without the optional addons; each one enhances a
-specific integration described above.
 
 ## Installation
 
@@ -141,7 +126,7 @@ you want to use.
 1. Open the frame with `/bpu`.
 2. Open options and choose the HUD sections you want visible.
 3. Adjust scale, opacity, fonts, and textures for your UI.
-4. Save a native loadout, or use Rematch if it is installed.
+4. Save a loadout for the team you want to come back to.
 5. Enable zone tracking and utility buttons as needed.
 
 ## Troubleshooting
@@ -157,14 +142,12 @@ you want to use.
 
 - Avoid changing secure pet actions during combat; deferred updates are applied
   after combat ends.
-- If Rematch is installed, verify which addon is managing the active team.
 - Keep only one `BattlePetUtility` folder in the AddOns directory.
 
 ### Zone Data Is Unexpected
 
-- PetTracker data is preferred when PetTracker is installed.
 - Update the pet journal or change zones to refresh collection data.
-- Include the current zone and optional-addon list when reporting a problem.
+- Include the current zone when reporting a problem.
 
 ## Localization
 

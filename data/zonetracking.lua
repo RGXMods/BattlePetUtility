@@ -96,10 +96,6 @@ local PET_QUALITY_COLORS = {
 
 BattlePetUtility_ZoneTrackerMixin = {};
 
-local function IsPetTrackerLoaded()
-	return rawget(_G, "PetTracker") ~= nil;
-end
-
 local qualityMapCache = nil;
 local function InvalidateQualityMap()
 	qualityMapCache = nil;
@@ -113,89 +109,6 @@ local function GetMapName(mapID)
 
 	local mapInfo = C_Map.GetMapInfo(mapID);
 	return mapInfo and mapInfo.name or nil;
-end
-
-local function GetPetTrackerSnapshotForMap(mapID)
-	local petTracker = rawget(_G, "PetTracker");
-	local maps = petTracker and petTracker.Maps;
-	if(type(maps) ~= "table" or type(maps.GetProgressIn) ~= "function") then
-		return nil;
-	end
-
-	local ok, progress = pcall(maps.GetProgressIn, maps, mapID);
-	if(not ok or type(progress) ~= "table") then
-		return nil;
-	end
-
-	local total = tonumber(progress.total) or 0;
-	if(total <= 0) then
-		return nil;
-	end
-
-	local missingBucket = type(progress[0]) == "table" and progress[0] or {};
-	local missing = tonumber(missingBucket.total) or 0;
-	local owned = math.max(0, total - missing);
-	local qualityCounts = { [1] = 0, [2] = 0, [3] = 0, [4] = 0 };
-	local missingNames, allNames = {}, {};
-
-	local maxQuality = tonumber(petTracker.MaxPlayerQuality or 4) or 4;
-	for quality = 0, maxQuality do
-		local bucket = type(progress[quality]) == "table" and progress[quality] or nil;
-		if(bucket) then
-			for level = 0, 25 do
-				local speciesAtLevel = bucket[level];
-				if(type(speciesAtLevel) == "table") then
-					for _, species in ipairs(speciesAtLevel) do
-						local name = nil;
-						local icon = nil;
-						local sourceIcon = nil;
-						if(type(species) == "table" and type(species.GetInfo) == "function") then
-							local ok, speciesName, speciesIcon = pcall(species.GetInfo, species);
-							if(ok) then
-								name = speciesName;
-								icon = speciesIcon;
-							end
-						end
-
-						if(type(species) == "table" and type(species.GetSourceIcon) == "function") then
-							local ok, source = pcall(species.GetSourceIcon, species);
-							if(ok) then
-								sourceIcon = source;
-							end
-						end
-
-						name = name or BPU.L["unknown_zone"];
-						allNames[#allNames + 1] = {
-							name = name,
-							quality = quality,
-							icon = icon,
-							sourceIcon = sourceIcon,
-						};
-
-						if(quality <= 0) then
-							missingNames[#missingNames + 1] = name;
-						else
-							local clampedQuality = math.max(1, math.min(4, quality));
-							qualityCounts[clampedQuality] = (qualityCounts[clampedQuality] or 0) + 1;
-						end
-					end
-				end
-			end
-		end
-	end
-
-	return {
-		mapID = mapID,
-		mapName = GetMapName(mapID),
-		total = total,
-		owned = owned,
-		missing = missing,
-		percent = total > 0 and (owned / total) or 0,
-		qualityCounts = qualityCounts,
-		missingNames = missingNames,
-		allNames = allNames,
-		provider = "PetTracker",
-	};
 end
 
 local function GetSpeciesName(speciesID)
@@ -222,12 +135,6 @@ local function GetPetQualityColor(quality)
 end
 
 local function BuildSpeciesQualityMap()
-	-- PetTracker path: we never use the native quality map, so skip the whole scan
-	-- (and critically, avoid mutating C_PetJournal filters which would thrash PetTracker).
-	if(IsPetTrackerLoaded()) then
-		return {};
-	end
-
 	if(qualityMapCache) then
 		return qualityMapCache;
 	end
@@ -647,7 +554,7 @@ local function ResolveZoneProgress()
 	local mapID = currentMapID;
 	local bestKnownMapName = GetMapName(currentMapID) or ZONE_TRACKER_TITLE;
 	while(mapID and mapID > 0) do
-		local data = GetPetTrackerSnapshotForMap(mapID) or GetNativeProgressForMap(mapID);
+		local data = GetNativeProgressForMap(mapID);
 		if(data) then
 			data.state = "ready";
 			data.title = data.mapName or bestKnownMapName;
@@ -664,7 +571,7 @@ local function ResolveZoneProgress()
 
 	local aliasMapID = MAP_ALIASES[currentMapID];
 	if(aliasMapID and aliasMapID ~= currentMapID) then
-		local aliasData = GetPetTrackerSnapshotForMap(aliasMapID) or GetNativeProgressForMap(aliasMapID);
+		local aliasData = GetNativeProgressForMap(aliasMapID);
 		if(aliasData) then
 			aliasData.state = "ready";
 			aliasData.title = bestKnownMapName;
@@ -681,16 +588,6 @@ local function ResolveZoneProgress()
 				resolvedMapID = aliasMapID,
 			};
 		end
-
-		if(GetPetTrackerSnapshotForMap(aliasMapID)) then
-			return {
-				state = "empty",
-				title = bestKnownMapName,
-				detail = BPU.L["no_trackable_wild_pets"],
-				provider = "PetTracker",
-				resolvedMapID = aliasMapID,
-			};
-		end
 	end
 
 	if(addon.ZoneSpeciesByMap and addon.ZoneSpeciesByMap[currentMapID]) then
@@ -699,15 +596,6 @@ local function ResolveZoneProgress()
 			title = bestKnownMapName,
 			detail = BPU.L["no_trackable_wild_pets"],
 			provider = "native",
-		};
-	end
-
-	if(GetPetTrackerSnapshotForMap(currentMapID)) then
-		return {
-			state = "empty",
-			title = bestKnownMapName,
-			detail = BPU.L["no_trackable_wild_pets"],
-			provider = "PetTracker",
 		};
 	end
 
