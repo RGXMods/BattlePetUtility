@@ -1,4 +1,4 @@
-## Unreleased
+## v2.3.29 - 2026-11-19
 
 - Battle Pet Utility runs entirely on its own code and RGX-Framework: loadouts are its own saved teams and zone tracking reads the game's pet journal. It no longer reads or drives other addons, and the TOC lists no optional dependencies.
 
