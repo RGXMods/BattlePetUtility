@@ -11,7 +11,7 @@ This directory contains the Lua modules that drive BattlePetUtility at runtime.
 
 - `core.lua` - Core addon bootstrap, event flow, HUD updates, and shared helpers.
 - `options.lua` - Saved variable defaults, dropdown options, media selection, and frame settings.
-- `petloadouts.lua` - Native loadout management and Rematch-aware team handling.
+- `petloadouts.lua` - Native loadout management.
 - `zonetracking.lua` - Zone pet tracker rendering and progress logic.
 - `zonespecies.lua` - Built-in BPU zone pet species data.
 - `itembuttons.lua` - Pet-related utility item buttons and quick actions.

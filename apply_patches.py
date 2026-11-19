@@ -35,7 +35,6 @@ def main():
         (base / 'data' / 'zonetracking.lua', 'All zone pets collected', 'zone_pets_collected'),
         # data/petloadouts.lua
         (base / 'data' / 'petloadouts.lua', 'Another loadout with the same name already exists. Do you want to overwrite?', 'loadout_overwrite_confirm'),
-        (base / 'data' / 'petloadouts.lua', 'Load (Rematch)', 'load_rematch_team'),
         (base / 'data' / 'petloadouts.lua', 'Restore', 'restore_loadout'),
         (base / 'data' / 'petloadouts.lua', 'No loadouts', 'no_loadouts'),
         (base / 'data' / 'petloadouts.lua', 'No Results', 'no_results'),

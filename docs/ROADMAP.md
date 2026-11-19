@@ -10,7 +10,6 @@ BattlePetUtility is currently in a stability and UX-polish phase for Retail Midn
 
 2. Loadout reliability
 - Keep native BattlePetUtility loadouts dependable in all common UI states.
-- Maintain optional Rematch interoperability without making it required.
 - Keep account-wide saved loadouts realtime and consistent across characters.
 
 3. Utility and layout polish

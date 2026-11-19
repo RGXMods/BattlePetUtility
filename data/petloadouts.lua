@@ -170,13 +170,6 @@ StaticPopupDialogs["BattlePetUtility_LOADOUT_DELETE"] = {
 	hideOnEscape = 1,
 };
 
-StaticPopupDialogs["BattlePetUtility_LOADOUT_REMATCH_MANAGED"] = {
-	text = BPU.L["rematch_managed"],
-	button1 = ACCEPT,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = 1,
-};
 	
 StaticPopupDialogs["BattlePetUtility_LOADOUT_SAVE"] = {
 	text = BPU.L["enter_loadout_name"],
@@ -227,108 +220,6 @@ end
 -- "Usage" errors (not nil returns) for non-GUID arguments.
 addon.IsPetGUID = IsPetGUID;
 
-function addon:IsRematchLoadoutsEnabled()
-	return type(Rematch) == "table"
-		and type(Rematch.savedTeams) == "table"
-		and type(Rematch.loadTeam) == "table"
-		and type(Rematch.loadTeam.LoadTeamID) == "function";
-end
-
-function addon:GetRematchTeamIDByName(name)
-	if(not addon:IsRematchLoadoutsEnabled() or type(name) ~= "string") then return nil end
-	if(type(Rematch.savedTeams.GetTeamIDByName) == "function") then
-		return Rematch.savedTeams:GetTeamIDByName(name);
-	end
-
-	for teamID, team in pairs(Rematch5SavedTeams or {}) do
-		if(team and string.lower(team.name or "") == string.lower(name)) then
-			return teamID;
-		end
-	end
-end
-
-function addon:BuildRematchLoadout(teamID, team)
-	if(not team) then return nil end
-
-	local pets = {};
-	local usedPetIDs = {};
-
-	for slotIndex = 1, 3 do
-		local rematchPetID = team.pets and team.pets[slotIndex] or nil;
-		local rematchTag = team.tags and team.tags[slotIndex] or nil;
-
-		local ability1, ability2, ability3 = nil, nil, nil;
-		if(Rematch.petTags and type(Rematch.petTags.GetAbilities) == "function" and rematchTag) then
-			ability1, ability2, ability3 = Rematch.petTags:GetAbilities(rematchTag);
-		end
-
-		local resolvedPetID = rematchPetID;
-		if(IsPetGUID(resolvedPetID)) then
-			usedPetIDs[resolvedPetID] = true;
-		else
-			resolvedPetID = nil;
-			if(Rematch.petTags and type(Rematch.petTags.FindPetID) == "function" and rematchTag) then
-				local candidate = Rematch.petTags:FindPetID(rematchTag, usedPetIDs);
-				if(IsPetGUID(candidate)) then
-					resolvedPetID = candidate;
-					usedPetIDs[candidate] = true;
-				end
-			end
-		end
-
-		pets[slotIndex] = {
-			petID = resolvedPetID,
-			abilities = { ability1, ability2, ability3 },
-			rematchPetID = rematchPetID,
-			rematchTag = rematchTag,
-		};
-	end
-
-	return {
-		name = team.name or ("Rematch Team " .. tostring(teamID or "")),
-		pets = pets,
-		rematchTeamID = teamID,
-		isRematch = true,
-	};
-end
-
-function addon:GetRematchLoadouts()
-	local loadoutData = {};
-	if(not addon:IsRematchLoadoutsEnabled()) then return loadoutData, 0 end
-
-	local iter = nil;
-	local state = nil;
-	local key = nil;
-
-	if(type(Rematch.savedTeams.AllTeams) == "function") then
-		iter, state, key = Rematch.savedTeams:AllTeams();
-	else
-		state = Rematch5SavedTeams or {};
-		iter = next;
-	end
-
-	while(true) do
-		local teamID, team = iter(state, key);
-		key = teamID;
-		if(teamID == nil) then
-			break
-		end
-
-		if(type(team) == "table" and team.name and team.name ~= "") then
-			local data = addon:BuildRematchLoadout(teamID, team);
-			if(data) then
-				tinsert(loadoutData, data);
-			end
-		end
-	end
-
-	table.sort(loadoutData, function(a, b)
-		return string.lower(a.name or "") < string.lower(b.name or "");
-	end);
-
-	return loadoutData, #loadoutData;
-end
-	
 StaticPopupDialogs["BattlePetUtility_LOADOUT_RENAME"] = {
 	text = BPU.L["enter_new_loadout_name"],
 	button1 = ACCEPT,
@@ -466,23 +357,9 @@ end
 function addon:RestoreLoadout(loadout_info)
 	if(not loadout_info) then return false end
 
-	local rematchTeamID = nil;
 	local loadout_name = loadout_info;
-
 	if(type(loadout_info) == "table") then
 		loadout_name = loadout_info.name;
-		rematchTeamID = loadout_info.rematchTeamID;
-	elseif(type(loadout_info) == "string" and addon:IsRematchLoadoutsEnabled()) then
-		rematchTeamID = addon:GetRematchTeamIDByName(loadout_info);
-	end
-
-	if(rematchTeamID and addon:IsRematchLoadoutsEnabled()) then
-		Rematch.loadTeam:LoadTeamID(rematchTeamID);
-		addon:UpdatePets();
-		BattlePetUtilityPetFrame_ResetAbilitySwitches();
-		BattlePetUtilityFrameLoadoutsScrollFrame_ToggleVisibility(false);
-		CloseMenus();
-		return true;
 	end
 
 	if(not loadout_name or loadout_name == "") then return false end
@@ -568,26 +445,12 @@ end
 function addon:GetSortedLoadouts()
 	local loadoutData = {};
 	local savedLoadouts = EnsureSavedLoadoutsTable() or {};
-	local seenNames = {};
 
 	for loadout_name, pets in pairs(savedLoadouts) do
-		local entry = {
+		tinsert(loadoutData, {
 			name = loadout_name,
 			pets = pets,
-		};
-		tinsert(loadoutData, entry);
-		seenNames[string.lower(loadout_name or "")] = true;
-	end
-
-	if(addon.IsRematchLoadoutsEnabled and addon:IsRematchLoadoutsEnabled()) then
-		local rematchLoadouts = addon:GetRematchLoadouts();
-		for _, loadout in ipairs(rematchLoadouts) do
-			local normalizedName = string.lower(loadout.name or "");
-			if(not seenNames[normalizedName]) then
-				tinsert(loadoutData, loadout);
-				seenNames[normalizedName] = true;
-			end
-		end
+		});
 	end
 	
 	table.sort(loadoutData, function(a, b)
@@ -663,22 +526,14 @@ function BattlePetUtilityFrameLoadouts_UpdateList()
 					else
 						petIcon.level:SetText("");
 						
-						if(data.isRematch) then
-							petIcon.icon:Show();
-							petIcon.icon:SetTexture("Interface\\ICONS\\INV_Misc_QuestionMark");
-							petIcon.iconBorder:SetVertexColor(0.7, 0.6, 0.2);
-							petIcon.petTypeIcon:Hide();
-							petIcon.isDead:Hide();
-						else
-							petIcon.icon:Hide();
-							petIcon.iconBorder:SetVertexColor(0.8, 0.1, 0.1);
-							petIcon.petTypeIcon:Hide();
-							petIcon.isDead:Show();
-							
-							button.background:SetVertexColor(0.8, 0.1, 0.1);
-							button.backgroundError:Show();
-							button.hasMissingPet = true;
-						end
+						petIcon.icon:Hide();
+						petIcon.iconBorder:SetVertexColor(0.8, 0.1, 0.1);
+						petIcon.petTypeIcon:Hide();
+						petIcon.isDead:Show();
+						
+						button.background:SetVertexColor(0.8, 0.1, 0.1);
+						button.backgroundError:Show();
+						button.hasMissingPet = true;
 					end
 				end
 				
@@ -715,7 +570,7 @@ function BattlePetUtilityLoadoutsButton_OnClick(self, button)
 	if(self.data.notFound) then return end
 	
 	if(button == "LeftButton") then
-		if(self.data.isRematch or not self.hasMissingPet) then
+		if(not self.hasMissingPet) then
 			addon:RestoreLoadout(self.data);
 		else
 			StaticPopup_Show("BattlePetUtility_LOADOUT_DELETE", self.data.name, nil, self.data.name)
@@ -737,11 +592,7 @@ function BattlePetUtilityLoadoutsButton_OnEnter(self)
 	GameTooltip:AddLine("|n");
 	GameTooltip:AddLine(addon:GetPetLoadoutText(self.data.pets));
 	
-	if(self.data.isRematch) then
-		GameTooltip:AddLine("|n");
-		GameTooltip:AddLine(BPU.L["managed_by_rematch"]);
-		GameTooltip:AddLine(BPU.L["load_rematch_team"]);
-	elseif(not self.hasMissingPet) then
+	if(not self.hasMissingPet) then
 		GameTooltip:AddLine(BPU.L["restore_loadout"]);
 	else
 		GameTooltip:AddLine(BPU.L["missing_pets_invalid"]);
@@ -765,55 +616,13 @@ function BattlePetUtilityFrameLoadouts_OnLoad(self)
 	HybridScrollFrame_CreateButtons(self.scrollFrame, "BattlePetUtilityLoadoutsButtonTemplate", 0, 0, nil, nil, 0, 0);
 end
 
-function addon:OpenRematchSaveTeamDialog()
-	if(type(Rematch) ~= "table" or not addon:IsRematchLoadoutsEnabled()) then
-		return false;
-	end
-
-	-- Preferred path: use Rematch's existing Save As button behavior.
-	local saveAsButton = Rematch.bottombar and Rematch.bottombar.SaveAsButton;
-	if(saveAsButton and type(saveAsButton.OnClick) == "function") then
-		local ok = pcall(saveAsButton.OnClick, saveAsButton);
-		if(ok) then
-			return true;
-		end
-	end
-
-	-- Fallback path: invoke SaveTeam dialog directly.
-	if(Rematch.saveDialog and type(Rematch.saveDialog.SidelineLoadouts) == "function") then
-		pcall(Rematch.saveDialog.SidelineLoadouts, Rematch.saveDialog);
-	end
-
-	if(Rematch.dialog and type(Rematch.dialog.ShowDialog) == "function") then
-		local saveMode = (Rematch.constants and Rematch.constants.SAVE_MODE_SAVEAS) or 2;
-		local subject = { saveMode = saveMode };
-		local currentTeamID = Rematch.settings and Rematch.settings.currentTeamID;
-
-		if(Rematch.savedTeams and type(Rematch.savedTeams.IsUserTeam) == "function" and currentTeamID and Rematch.savedTeams:IsUserTeam(currentTeamID)) then
-			subject.teamID = currentTeamID;
-		end
-
-		local ok = pcall(Rematch.dialog.ShowDialog, Rematch.dialog, "SaveTeam", subject);
-		if(ok) then
-			return true;
-		end
-	end
-
-	return false;
-end
-
 function BattlePetUtilityLoadoutsSaveButton_OnLoad(self)
 	local actionData = {
 		iconTexture = "Interface\\AddOns\\BattlePetUtility\\media\\savebuttonicon.tga",
 		-- count = "S",
 		tooltipTitle = "Save Loadout",
-		tooltipDescription = "Save current pets and abilities to BattlePetUtility loadouts, or open Rematch Save Team when Rematch is available",
+		tooltipDescription = "Save current pets and abilities to BattlePetUtility loadouts",
 		func = function(self)
-			if(addon:IsRematchLoadoutsEnabled()) then
-				if(addon:OpenRematchSaveTeamDialog()) then
-					return;
-				end
-			end
 			StaticPopup_Show("BattlePetUtility_LOADOUT_SAVE");
 		end,
 	};
@@ -881,7 +690,7 @@ function BattlePetUtilityFrameLoadouts_OpenContextMenu(relativeFrame)
 			text = data.name, isTitle = true, notCheckable = true,
 		},
 		{
-			text = data.isRematch and BPU.L["load_rematch_team"] or BPU.L["restore_loadout"],
+			text = BPU.L["restore_loadout"],
 			func = function()
 				addon:RestoreLoadout(data);
 			end,
@@ -910,21 +719,6 @@ function BattlePetUtilityFrameLoadouts_OpenContextMenu(relativeFrame)
 		},
 	};
 
-	if(data.isRematch) then
-		contextMenuData[3].disabled = true;
-		contextMenuData[4].disabled = true;
-		contextMenuData[5].disabled = true;
-		tinsert(contextMenuData, {
-			text = BPU.L["open_rematch"],
-			func = function()
-				if(Rematch and Rematch.frame and type(Rematch.frame.Toggle) == "function") then
-					Rematch.frame:Toggle();
-				end
-			end,
-			notCheckable = true,
-		});
-	end
-	
 	if(relativeFrame.hasMissingPet) then
 		contextMenuData[2].disabled = true;
 	end
